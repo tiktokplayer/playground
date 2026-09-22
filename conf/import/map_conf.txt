@@ -1,0 +1,4 @@
+map: 2026arena1
+map: 2026arena2
+map: 2026arena3
+map: 2026arena4

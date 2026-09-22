@@ -1,0 +1,248 @@
+//===== rAthena Script =======================================
+//= Player options menu (custom)
+//===== Description: =========================================
+//= The roulette button of the client opens this dialog (see
+//= clif_parse_roulette_open). One place for the options a
+//= player can set for himself:
+//=   1. Packet filter   - hide visual effects of other players
+//=   2. Party buff bar  - @spb: buffs next to the party names
+//=   3. Hide summons    - pets, elementals, homunculi, ABR,
+//=                        bionics and wargs
+//= Character variables: PF_MASK (filters in use), PF_CHOICE
+//= (filters chosen), SPB_HIDE (buffs hidden in @spb) and
+//= HIDE_SUM (summons hidden).
+//= A menu option can not contain a colon: it is the separator.
+//============================================================
+
+-	script	PlayerOptionsMenu	FAKE_NPC,{
+	end;
+
+OnInit:
+	// packet filter: bits of enum e_packet_filter (src/map/pc.hpp)
+	setarray .pf_bit[0],  1, 2, 4, 8, 16, 32, 64, 128, 256, 1024, 2048, 4096, 8192;
+	setarray .pf_name$[0],
+		"Item use animations",
+		"Emoticons",
+		"Public chat of other players",
+		"Status effects on other players",
+		"Attacks between others (animation and damage)",
+		"Targeted skill animations between others",
+		"Ground skill cast animations",
+		"Songs and dances (ground effect)",
+		"Direction changes",
+		"Pet emotions",
+		"Auras and effects on other players",
+		"Hat effects",
+		"Area skill ground effects (hides AoE of others!)";
+	.pf_safe = 1|2|8|128|256|1024|2048|4096;   // decoration only
+	.pf_woe  = .pf_safe|4;                     // ... plus public chat
+
+	// party buff bar: the table of atcommand.cpp (bit i = buff i)
+	setarray .spb_tag$[0],  "+", "F", "S", "E", "X", "!", "H", "1", "2", "3", "A", "B";
+	setarray .spb_name$[0],
+		"Devotion", "Chemical Protection", "Striking", "Spell Enchanting", "Expiatio", "Full Shadow Protection",
+		"Mediale Votum", "Presens Acies", "Argutus Telum", "Argutus Vita", "Increase AGI", "Blessing";
+
+	// summons: bits of enum e_summon_hide (src/map/pc.hpp)
+	setarray .sum_bit[0],  1, 2, 4, 8, 16, 32, 64;
+	setarray .sum_name$[0],
+		"Pets of other players",
+		"My pets",
+		"Elementals of other players (Elemental Master)",
+		"Homunculi of other players (Biolo)",
+		"ABR of other players (Meister)",
+		"Bionics of other players (Biolo)",
+		"Wargs of other players (Ranger)";
+	end;
+
+// Called by the roulette button
+OnOpen:
+	while (1) {
+		clear;
+		mes "[Player Options]";
+		mes "Choose what you want to set up.";
+		switch (select(
+				"Packetfilter",
+				"Show party buff",
+				"Hide entities",
+				"Close")) {
+		case 1:
+			callsub L_PacketFilter;
+			break;
+		case 2:
+			callsub L_Spb;
+			break;
+		case 3:
+			callsub L_Summons;
+			break;
+		case 4:
+			close;
+		}
+	}
+	end;
+
+// ------------------------------------------------------------ 1. packet filter
+L_PacketFilter:
+	while (1) {
+		clear;
+		.@active = getpacketfilter();
+		if (.@active)
+			PF_CHOICE = .@active;              // what is in use is what the player chose last (also when it was set with @packetfilter)
+		else if (PF_CHOICE == 0)
+			PF_CHOICE = .pf_safe;              // nothing chosen yet: start from the safe preset
+		.@n = callsub(L_Count, PF_CHOICE);
+		mes "[Packet Filter]";
+		mes "Hide the visual effects of ^0055FFother players^000000 to reduce lag.";
+		mes "Your own actions, hits on you, skills aimed at you and your own skill effects are never hidden.";
+		mes " ";
+		if (.@active)
+			mes "Status: ^008000ENABLED^000000 (" + .@n + " of " + getarraysize(.pf_bit) + " filters)";
+		else
+			mes "Status: ^FF0000DISABLED^000000 (" + .@n + " filters chosen)";
+		switch (select(
+				"Enable packetfilter",
+				"Choose filters one by one",
+				"Turn everything off",
+				"Preset - Safe (decoration only)",
+				"Preset - WoE (safe + public chat)",
+				"<< Back")) {
+		case 1:
+			setpacketfilter(PF_CHOICE);
+			break;
+		case 2:
+			callsub L_PfPick;
+			break;
+		case 3:
+			setpacketfilter(0);                // the choice stays, "Enable packetfilter" brings it back
+			break;
+		case 4:
+			PF_CHOICE = .pf_safe;
+			setpacketfilter(.pf_safe);
+			break;
+		case 5:
+			PF_CHOICE = .pf_woe;
+			setpacketfilter(.pf_woe);
+			break;
+		case 6:
+			return;
+		}
+	}
+	return;
+
+// How many filters are in a mask
+L_Count:
+	.@m = getarg(0);
+	.@c = 0;
+	for (.@i = 0; .@i < getarraysize(.pf_bit); .@i++)
+		if (.@m & .pf_bit[.@i])
+			.@c++;
+	return .@c;
+
+L_PfPick:
+	while (1) {
+		clear;
+		.@menu$ = "";
+		for (.@i = 0; .@i < getarraysize(.pf_bit); .@i++)
+			.@menu$ += ((PF_CHOICE & .pf_bit[.@i]) ? "^008000[ON]^000000  " : "^FF0000[OFF]^000000 ") + .pf_name$[.@i] + ":";
+		.@menu$ += "<< Back";
+		mes "[Packet Filter]";
+		mes "Click a filter to switch it on or off.";
+		if (getpacketfilter())
+			mes "The change applies right away.";
+		else
+			mes "The packet filter is ^FF0000disabled^000000: choose ^0055FFEnable packetfilter^000000 to use these.";
+		.@s = select(.@menu$) - 1;
+		if (.@s >= getarraysize(.pf_bit))
+			return;
+		PF_CHOICE = PF_CHOICE ^ .pf_bit[.@s];
+		if (getpacketfilter())
+			setpacketfilter(PF_CHOICE);        // enabled: use the new choice now (empty = disabled)
+	}
+	return;
+
+// ------------------------------------------------------------ 2. party buff bar
+L_Spb:
+	while (1) {
+		clear;
+		.@on = getspb();
+		.@h = getspbhide();
+		.@shown = 0;
+		for (.@i = 0; .@i < getarraysize(.spb_tag$); .@i++)
+			if (!(.@h & (1 << .@i)))
+				.@shown++;
+		mes "[Party Buff Bar]";
+		mes "Shows the main buffs of your party members next to their names in the party window, for example ^0055FF" + strcharinfo(0) + "[+FAB]^000000.";
+		mes " ";
+		if (.@on)
+			mes "Status: ^008000ENABLED^000000";
+		else
+			mes "Status: ^FF0000DISABLED^000000";
+		mes "Buffs shown: ^0055FF" + .@shown + "^000000 of " + getarraysize(.spb_tag$);
+		switch (select(
+				(.@on ? "Disable party buff bar" : "Enable party buff bar"),
+				"Choose which buffs to show",
+				"Show all buffs",
+				"<< Back")) {
+		case 1:
+			if (.@on) {
+				setspb(0);
+			} else if (!setspb(1)) {
+				clear;
+				mes "[Party Buff Bar]";
+				mes "You need to be in a ^FF0000party^000000 first.";
+				next;
+			}
+			break;
+		case 2:
+			callsub L_SpbPick;
+			break;
+		case 3:
+			setspbhide(0);
+			break;
+		case 4:
+			return;
+		}
+	}
+	return;
+
+L_SpbPick:
+	while (1) {
+		clear;
+		.@h = getspbhide();
+		.@menu$ = "";
+		for (.@i = 0; .@i < getarraysize(.spb_tag$); .@i++)
+			.@menu$ += ((.@h & (1 << .@i)) ? "^FF0000[HIDDEN]^000000  " : "^008000[SHOWN]^000000  ") + .spb_tag$[.@i] + "  " + .spb_name$[.@i] + ":";
+		.@menu$ += "<< Back";
+		mes "[Party Buff Bar]";
+		mes "Click a buff to show or hide it. The letter is what appears next to the names.";
+		.@s = select(.@menu$) - 1;
+		if (.@s >= getarraysize(.spb_tag$))
+			return;
+		setspbhide(getspbhide() ^ (1 << .@s));
+	}
+	return;
+
+// ------------------------------------------------------------ 3. hide summons
+L_Summons:
+	while (1) {
+		clear;
+		.@m = getsummonhide();
+		.@menu$ = "";
+		for (.@i = 0; .@i < getarraysize(.sum_bit); .@i++)
+			.@menu$ += ((.@m & .sum_bit[.@i]) ? "^FF0000[HIDDEN]^000000  " : "^008000[SHOWN]^000000  ") + .sum_name$[.@i] + ":";
+		.@menu$ += "Hide everything:Show everything again:<< Back";
+		mes "[Hide Summons]";
+		mes "Click one to hide or show it. They vanish or reappear right away and the choice is kept for your next login.";
+		.@s = select(.@menu$) - 1;
+		if (.@s == getarraysize(.sum_bit)) {
+			setsummonhide(127);                    // SH_ALL
+		} else if (.@s == getarraysize(.sum_bit) + 1) {
+			setsummonhide(0);
+		} else if (.@s > getarraysize(.sum_bit) + 1) {
+			return;
+		} else {
+			setsummonhide(getsummonhide() ^ .sum_bit[.@s]);
+		}
+	}
+	return;
+}

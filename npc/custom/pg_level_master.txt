@@ -1,0 +1,61 @@
+//===== rAthena Script =======================================
+//= Level Master + Job Master (lobby copies)
+//===== Description: =========================================
+//= Level Master raises Base / Job level (to the maximum of the current job, or to a level you type; never lowers).
+//= The Job Master is a copy of the one in 1@exds (duplicate of the "Job Master" script).
+//============================================================
+
+hero_ent3,77,128,4	script	Level Master	858,{
+	mes "[Level Master]";
+	mes "Current levels: Base ^0000FF" + BaseLevel + "^000000 / Job ^0000FF" + JobLevel + "^000000.";
+	mes "What do you want?";
+	next;
+	switch (select("Max Base and Job level:Choose Base level:Choose Job level:Cancel")) {
+	case 1:
+		.@b = BaseLevel;
+		.@j = JobLevel;
+		BaseLevel = 9999;			// the server clamps it to the maximum of the job
+		JobLevel = 9999;
+		break;
+	case 2:
+		mes "[Level Master]";
+		mes "Type the Base level (higher than " + BaseLevel + "):";
+		input .@v;
+		if (.@v <= BaseLevel) {
+			next;
+			mes "[Level Master]";
+			mes "I only raise levels.";
+			close;
+		}
+		.@b = BaseLevel;
+		.@j = JobLevel;
+		BaseLevel = .@v;
+		break;
+	case 3:
+		mes "[Level Master]";
+		mes "Type the Job level (higher than " + JobLevel + "):";
+		input .@v;
+		if (.@v <= JobLevel) {
+			next;
+			mes "[Level Master]";
+			mes "I only raise levels.";
+			close;
+		}
+		.@b = BaseLevel;
+		.@j = JobLevel;
+		JobLevel = .@v;
+		break;
+	case 4:
+		close;
+	}
+	percentheal 100, 100;
+	specialeffect2 EF_BASH;
+	next;
+	mes "[Level Master]";
+	mes "Done. Base ^0000FF" + BaseLevel + "^000000 / Job ^0000FF" + JobLevel + "^000000.";
+	if (BaseLevel == .@b && JobLevel == .@j)
+		mes "(Those are already the maximum for your job.)";
+	close;
+}
+
+hero_ent3,81,128,4	duplicate(Job Master)	Job Master#hero	4_F_KAFRA6

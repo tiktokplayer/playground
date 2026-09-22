@@ -1,0 +1,944 @@
+//===== rAthena Script =======================================
+//= Arena 7 vs 7 (custom, playground)
+//===== Description: =========================================
+//= Two pre-made parties of 7 fight best-of-3 rounds on the 2026arena1..4 maps (one match per map, up to 4 at once).
+//=  * Each party must have exactly 7 online members standing in the lobby map, with no repeated job line inside the party
+//=    (job line = the class without its upper / baby / third / fourth flag: Cardinal and Arch Bishop are the same line).
+//=  * The leader registers at the Arena Master; when two parties are waiting and an arena is free the match starts.
+//=  * A round is won by the party that eliminates the other (dead, offline or out of the map counts as eliminated).
+//=    When the round time runs out the party with more survivors wins, then the one with more HP left; still equal = draw.
+//=  * Between rounds everybody is revived, healed, cleaned of status effects and warped back to its start; sides swap each round.
+//=  * The first party to win 2 rounds wins the match (a draw is replayed; at most 5 rounds).
+//=  * At registration a party can pick a specific arena or "any free arena"; the Arena Master's own name shows the queue size,
+//=    and its "Arena status" option lists every arena (phase, score, round, survivors) and every queued party.
+//=  * A live scoreboard is announced inside the arena map whenever the number of survivors on either side changes.
+//= Everything you may want to tune is at the top of OnInit of Arena2026Ctrl.
+//============================================================
+
+// -----------------------------------------------------------
+// Returns "" when the party can play, otherwise the reason it can not.
+//   getarg(0) party id   getarg(1) members required   getarg(2) lobby map
+// -----------------------------------------------------------
+// Label for a party, guild-first: the leader's guild name when they have one (online), else the party name.
+function	script	F_GuildTag	{
+	.@pid = getarg(0);
+	.@lid = getpartyleader(.@pid, 1);
+	if (.@lid > 0 && isloggedin(.@lid)) {
+		.@me = playerattached();
+		if (attachrid(.@lid)) {
+			.@gid = getcharid(2);
+			if (.@gid)
+				.@n$ = getguildname(.@gid);
+			detachrid;
+		}
+		if (.@me)
+			attachrid(.@me);
+		else
+			detachrid;
+	}
+	return (.@n$ != "") ? .@n$ : getpartyname(.@pid);
+}
+
+// Short label for a party: "Name" or "Name [GuildTag]" when the leader is online and in a guild.
+function	script	F_PartyLabel	{
+	.@pid = getarg(0);
+	.@n$ = getpartyname(.@pid);
+	.@lid = getpartyleader(.@pid, 1);
+	if (.@lid > 0 && isloggedin(.@lid)) {
+		.@me = playerattached();
+		if (attachrid(.@lid)) {
+			.@gid = getcharid(2);
+			if (.@gid)
+				.@n$ += " [" + getguildname(.@gid) + "]";
+			detachrid;
+		}
+		if (.@me)
+			attachrid(.@me);
+		else
+			detachrid;
+	}
+	return .@n$;
+}
+
+function	script	F_ArenaCheck	{
+	.@pid = getarg(0);
+	.@need = getarg(1);
+	.@lobby$ = getarg(2);
+	if (!.@pid)
+		return "The party does not exist any more.";
+	.@me = playerattached();
+	getpartymember .@pid, 2;
+	.@n = $@partymembercount;
+	copyarray .@aid[0], $@partymemberaid[0], .@n;
+	if (.@n != .@need)
+		return "The party needs exactly " + .@need + " members (it has " + .@n + ").";
+	for (.@i = 0; .@i < .@n; .@i++) {
+		if (!isloggedin(.@aid[.@i]))
+			return "All the members must be online.";
+	}
+	for (.@i = 0; .@i < .@n; .@i++) {
+		if (!attachrid(.@aid[.@i])) {
+			.@err$ = "All the members must be online.";
+			break;
+		}
+		if (strcharinfo(3) != .@lobby$) {
+			.@err$ = strcharinfo(0) + " is not in the lobby.";
+			break;
+		}
+		if (isdead()) {
+			.@err$ = strcharinfo(0) + " is dead.";
+			break;
+		}
+		.@line[.@i] = eaclass() & EAJ_UPPERMASK;
+		.@jname$[.@i] = jobname(Class);
+		.@pname$[.@i] = strcharinfo(0);
+	}
+	if (.@me)
+		attachrid(.@me);
+	else
+		detachrid;
+	if (.@err$ != "")
+		return .@err$;
+	for (.@i = 0; .@i < .@n; .@i++) {
+		for (.@j = .@i + 1; .@j < .@n; .@j++) {
+			if (.@line[.@i] == .@line[.@j])
+				return "Repeated job line: " + .@pname$[.@i] + " (" + .@jname$[.@i] + ") and " + .@pname$[.@j] + " (" + .@jname$[.@j] + ").";
+		}
+	}
+	return "";
+}
+
+
+// -----------------------------------------------------------
+// The lobby NPC: register / cancel / status
+// -----------------------------------------------------------
+hero_ent3,73,128,4	script	Arena Master	858,{
+	mes "[Arena Master]";
+	mes "7 vs 7, best of 3 rounds.";
+	mes "One party of 7 members, every member of a different job line.";
+	next;
+	switch (select("Register my party:Cancel my registration:Arena status:Rules:Leave")) {
+	case 1:
+		.@pid = getcharid(1);
+		mes "[Arena Master]";
+		if (!.@pid) {
+			mes "You need a party.";
+			close;
+		}
+		if (!is_party_leader()) {
+			mes "Only the party leader can register the party.";
+			close;
+		}
+		if (callsub(L_Busy, .@pid)) {
+			mes "Your party is already registered or fighting.";
+			close;
+		}
+		.@e$ = callfunc("F_ArenaCheck", .@pid, 7, "hero_ent3");
+		if (.@e$ != "") {
+			mes "Your party can not register:";
+			mes "^FF0000" + .@e$ + "^000000";
+			close;
+		}
+		mes "Your party is valid. Pick an arena, or let the system choose:";
+		next;
+		.@any$ = "";		// guild tags of the parties queued with "any free arena"
+		for (.@i = 0; .@i < $@arq_n; .@i++) {
+			if ($@arq_pref[.@i] == 0)
+				.@any$ += ((.@any$ != "") ? ", " : "") + callfunc("F_GuildTag", $@arq_pid[.@i]);
+		}
+		.@m$ = "Any free arena (" + $@arq_n + " waiting" + ((.@any$ != "") ? ": " + .@any$ : "") + ")";
+		for (.@s = 1; .@s <= 4; .@s++) {
+			.@m$ += ":Arena " + .@s + " - ";
+			if ($@ar_state[.@s]) {
+				.@m$ += "busy, " + callfunc("F_GuildTag", $@ar_pa[.@s]) + " vs " + callfunc("F_GuildTag", $@ar_pb[.@s]);
+			} else {
+				.@w$ = "";		// guild tags of the parties queued specifically for this arena
+				for (.@i = 0; .@i < $@arq_n; .@i++) {
+					if ($@arq_pref[.@i] == .@s)
+						.@w$ += ((.@w$ != "") ? ", " : "") + callfunc("F_GuildTag", $@arq_pid[.@i]);
+				}
+				.@m$ += "free" + ((.@w$ != "") ? " (" + .@w$ + " waiting)" : "");
+			}
+		}
+		.@sel = select(.@m$ + ":Cancel");
+		mes "[Arena Master]";
+		if (.@sel == 6) {
+			mes "Registration cancelled.";
+			close;
+		}
+		$@arq_pid[$@arq_n] = .@pid;
+		$@arq_pref[$@arq_n] = (.@sel == 1) ? 0 : .@sel - 1;		// 0 = any arena, else the arena number
+		$@arq_n++;
+		setnpcdisplay "Arena Master", "Arena Master (" + $@arq_n + " waiting)";
+		mes "Your party is registered (position " + $@arq_n + "), " + (($@arq_pref[$@arq_n - 1] == 0) ? "any free arena" : ("arena " + $@arq_pref[$@arq_n - 1] + " only")) + ".";
+		mes "Stay in the lobby, all together. When another party is ready and an arena is free, you will be warped.";
+		announce "[Arena] " + getpartyname(.@pid) + " is registered and waiting for an opponent (queue: " + $@arq_n + ").", bc_all, 0x00FFAA;
+		close2;
+		donpcevent "Arena2026Ctrl::OnQueueCheck";
+		end;
+	case 2:
+		.@pid = getcharid(1);
+		mes "[Arena Master]";
+		if (!.@pid || !is_party_leader()) {
+			mes "Only the party leader can cancel.";
+			close;
+		}
+		.@i = inarray($@arq_pid, .@pid);
+		if (.@i < 0 || .@i >= $@arq_n) {
+			mes "Your party is not waiting in the queue.";
+			close;
+		}
+		deletearray $@arq_pid[.@i], 1;
+		deletearray $@arq_pref[.@i], 1;
+		$@arq_n--;
+		setnpcdisplay "Arena Master", "Arena Master (" + $@arq_n + " waiting)";
+		mes "Registration cancelled.";
+		close;
+	case 3:
+		mes "[Arena Master]";
+		mes "^0000FFArenas:^000000";
+		for (.@s = 1; .@s <= 4; .@s++) {
+			if (!$@ar_state[.@s]) {
+				mes "Arena " + .@s + ": free";
+			} else {
+				.@phase$ = ($@ar_state[.@s] == 1) ? "preparing" : (($@ar_state[.@s] == 2) ? "fighting" : "between rounds");
+				mes "Arena " + .@s + " [" + callfunc("F_GuildTag", $@ar_pa[.@s]) + " vs " + callfunc("F_GuildTag", $@ar_pb[.@s]) + "] (" + .@phase$ + "): " + $@ar_sc_a[.@s] + " - " + $@ar_sc_b[.@s] + ", round " + $@ar_round[.@s] + ", alive " + $@ar_alive_a[.@s] + "-" + $@ar_alive_b[.@s];
+			}
+		}
+		mes "^0000FFQueue (" + $@arq_n + " waiting):^000000";
+		if (!$@arq_n)
+			mes "(empty)";
+		for (.@i = 0; .@i < $@arq_n; .@i++) {
+			.@w$ = ($@arq_pref[.@i] == 0) ? "any free arena" : ("Arena " + $@arq_pref[.@i] + " only");
+			mes (.@i + 1) + ". [" + callfunc("F_GuildTag", $@arq_pid[.@i]) + " waiting] - " + .@w$;
+		}
+		close;
+	case 4:
+		mes "[Arena Master]";
+		mes "- Best of 3 rounds: win 2 to win the match.";
+		mes "- A round ends when a whole party is dead, offline or out of the arena.";
+		mes "- If the time runs out: more survivors wins, then more HP left.";
+		mes "- Everybody is revived and healed between rounds; sides swap.";
+		mes "- No repeated job line inside a party (Cardinal = Arch Bishop).";
+		close;
+	case 5:
+		close;
+	}
+	end;
+
+L_Busy:
+	.@p = getarg(0);
+	if (inarray($@arq_pid, .@p) >= 0 && inarray($@arq_pid, .@p) < $@arq_n)
+		return 1;
+	for (.@s = 1; .@s <= 4; .@s++) {
+		if ($@ar_state[.@s] && ($@ar_pa[.@s] == .@p || $@ar_pb[.@s] == .@p))
+			return 1;
+	}
+	return 0;
+}
+
+
+// -----------------------------------------------------------
+// The controller: queue, matches, rounds. One tick per second.
+// -----------------------------------------------------------
+-	script	Arena2026Ctrl	FAKE_NPC,{
+OnInit:
+	// ---- settings ----
+	.slots = 4;				// arenas (maps)
+	.team = 7;				// players per party
+	.wins = 2;				// rounds to win a match
+	.maxrounds = 5;			// a match never lasts more than this many rounds
+	.countdown = 25;		// seconds of preparation before every round (players can move inside their area and buff)
+	.roundtime = 300;		// seconds per round
+	.between = 8;			// seconds after a round before the next set-up
+	.endwait = 10;			// seconds after the match before everybody goes back to the lobby
+	.tp_allowed = 0;		// 1 = Teleport / Fly Wing allowed inside the arenas
+	.lobby$ = "hero_ent3";
+	.lx = 69;
+	.ly = 136;
+	setarray .map$[1], "2026arena1", "2026arena2", "2026arena3", "2026arena4";
+	// start cell: every one of the 7 players of a side stacks on the very same, verified walkable cell (west / east)
+	setarray .wx[1], 50, 34, 41, 203;
+	setarray .wy[1], 96, 94, 95, 206;
+	setarray .ex[1], 145, 165, 160, 296;
+	setarray .ey[1], 96, 94, 95, 206;
+
+	for (.@i = 1; .@i <= .slots; .@i++) {
+		.@m$ = .map$[.@i];
+		setmapflag .@m$, MF_GVG;
+		setmapflag .@m$, MF_PVP_NOGUILD;		// (also honoured on GvG maps) guild mates / allies of the two parties still fight each other
+		setmapflag .@m$, MF_NOMEMO;
+		setmapflag .@m$, MF_NORETURN;
+		setmapflag .@m$, MF_NOBRANCH;
+		setmapflag .@m$, MF_NOPENALTY;
+		setmapflag .@m$, MF_NOWARPTO;
+		setmapflag .@m$, MF_NOTRADE;
+		if (!.tp_allowed)
+			setmapflag .@m$, MF_NOTELEPORT;
+		setmapflagnosave .@m$, .lobby$, .lx, .ly;		// whoever logs out inside comes back in the lobby
+		$@ar_state[.@i] = 0;
+		callsub L_Walls, .@i, 1;
+	}
+	$@arq_n = 0;
+	setnpcdisplay "Arena Master", "Arena Master (0 waiting)";
+	initnpctimer;
+	end;
+
+OnTimer1000:
+	if ($@arq_n >= 2)
+		callsub L_Queue;
+	for (.@s = 1; .@s <= .slots; .@s++) {
+		if ($@ar_state[.@s])
+			callsub L_Slot, .@s;
+	}
+	initnpctimer;
+	end;
+
+OnQueueCheck:
+	callsub L_Queue;
+	end;
+
+// ---------------------------------------------------------
+// queue -> match
+// ---------------------------------------------------------
+L_Queue:
+	// matches every free arena against the first two queued parties compatible with it (preference 0 = any arena, or that arena number).
+	// Restarts the scan whenever the queue changes, since a removal or a match shifts every index after it.
+	.@changed = 1;
+	while (.@changed) {
+		.@changed = 0;
+		for (.@s = 1; .@s <= .slots && !.@changed; .@s++) {
+			if ($@ar_state[.@s])
+				continue;
+			.@i1 = -1;
+			.@i2 = -1;
+			for (.@i = 0; .@i < $@arq_n; .@i++) {
+				if ($@arq_pref[.@i] != 0 && $@arq_pref[.@i] != .@s)
+					continue;
+				if (.@i1 < 0)
+					.@i1 = .@i;
+				else {
+					.@i2 = .@i;
+					break;
+				}
+			}
+			if (.@i1 < 0 || .@i2 < 0)
+				continue;
+			.@p1 = $@arq_pid[.@i1];
+			.@p2 = $@arq_pid[.@i2];
+			.@e1$ = callfunc("F_ArenaCheck", .@p1, .team, .lobby$);
+			.@e2$ = callfunc("F_ArenaCheck", .@p2, .team, .lobby$);
+			if (.@e1$ != "" || .@e2$ != "") {
+				if (.@e2$ != "") {		// remove the higher index first so .@i1 stays valid
+					callsub L_Tell, .@p2, "Arena: your registration was cancelled - " + .@e2$;
+					deletearray $@arq_pid[.@i2], 1;
+					deletearray $@arq_pref[.@i2], 1;
+					$@arq_n--;
+				}
+				if (.@e1$ != "") {
+					callsub L_Tell, .@p1, "Arena: your registration was cancelled - " + .@e1$;
+					deletearray $@arq_pid[.@i1], 1;
+					deletearray $@arq_pref[.@i1], 1;
+					$@arq_n--;
+				}
+				setnpcdisplay "Arena Master", "Arena Master (" + $@arq_n + " waiting)";
+				.@changed = 1;
+				continue;
+			}
+			deletearray $@arq_pid[.@i2], 1;
+			deletearray $@arq_pref[.@i2], 1;
+			deletearray $@arq_pid[.@i1], 1;
+			deletearray $@arq_pref[.@i1], 1;
+			$@arq_n -= 2;
+			setnpcdisplay "Arena Master", "Arena Master (" + $@arq_n + " waiting)";
+			callsub L_Begin, .@s, .@p1, .@p2;
+			.@changed = 1;
+		}
+	}
+	return;
+
+L_Tell:
+	.@a = getpartyleader(getarg(0), 1);
+	if (.@a > 0 && isloggedin(.@a)) {
+		.@me = playerattached();
+		if (attachrid(.@a))
+			dispbottom getarg(1);
+		if (.@me)
+			attachrid(.@me);
+		else
+			detachrid;
+	}
+	return;
+
+L_Begin:
+	.@s = getarg(0);
+	$@ar_pa[.@s] = getarg(1);
+	$@ar_pb[.@s] = getarg(2);
+	getpartymember getarg(1), 2;
+	for (.@k = 0; .@k < .team; .@k++)
+		$@ar_ma[.@s * 10 + .@k] = $@partymemberaid[.@k];
+	getpartymember getarg(2), 2;
+	for (.@k = 0; .@k < .team; .@k++)
+		$@ar_mb[.@s * 10 + .@k] = $@partymemberaid[.@k];
+	$@ar_round[.@s] = 1;
+	$@ar_sc_a[.@s] = 0;
+	$@ar_sc_b[.@s] = 0;
+	$@ar_fin[.@s] = 0;
+	announce "[Arena " + .@s + "] " + getpartyname(getarg(1)) + " vs " + getpartyname(getarg(2)) + " - best of 3!", bc_all, 0x00FFAA;
+	callsub L_Prep, .@s;
+	return;
+
+// ---------------------------------------------------------
+// countdown areas: during the countdown the players can move (and buff) only inside a box around their start cells.
+// The ring of walkable cells around the box is closed with setcell (generated from the map data, so real walls are never opened).
+// ---------------------------------------------------------
+L_Walls:
+	.@s = getarg(0);
+	.@v = getarg(1);	// 0 = close the ring around the prep areas, 1 = open it again
+	switch (.@s) {
+	case 1:
+		// box re-measured in-game (2026-09-21): west wall at x=44, east wall at x=150, north/south walls at y=87/106
+		setcell "2026arena1", 44, 87, 55, 87, cell_walkable, .@v;
+		setcell "2026arena1", 44, 88, 44, 88, cell_walkable, .@v;
+		setcell "2026arena1", 55, 88, 55, 88, cell_walkable, .@v;
+		setcell "2026arena1", 44, 89, 44, 89, cell_walkable, .@v;
+		setcell "2026arena1", 55, 89, 55, 89, cell_walkable, .@v;
+		setcell "2026arena1", 44, 90, 44, 90, cell_walkable, .@v;
+		setcell "2026arena1", 55, 90, 55, 90, cell_walkable, .@v;
+		setcell "2026arena1", 44, 91, 44, 91, cell_walkable, .@v;
+		setcell "2026arena1", 55, 91, 55, 91, cell_walkable, .@v;
+		setcell "2026arena1", 44, 92, 44, 92, cell_walkable, .@v;
+		setcell "2026arena1", 55, 92, 55, 92, cell_walkable, .@v;
+		setcell "2026arena1", 44, 93, 44, 93, cell_walkable, .@v;
+		setcell "2026arena1", 55, 93, 55, 93, cell_walkable, .@v;
+		setcell "2026arena1", 44, 94, 44, 94, cell_walkable, .@v;
+		setcell "2026arena1", 55, 94, 55, 94, cell_walkable, .@v;
+		setcell "2026arena1", 44, 95, 44, 95, cell_walkable, .@v;
+		setcell "2026arena1", 55, 95, 55, 95, cell_walkable, .@v;
+		setcell "2026arena1", 44, 96, 44, 96, cell_walkable, .@v;
+		setcell "2026arena1", 55, 96, 55, 96, cell_walkable, .@v;
+		setcell "2026arena1", 44, 97, 44, 97, cell_walkable, .@v;
+		setcell "2026arena1", 55, 97, 55, 97, cell_walkable, .@v;
+		setcell "2026arena1", 44, 98, 44, 98, cell_walkable, .@v;
+		setcell "2026arena1", 55, 98, 55, 98, cell_walkable, .@v;
+		setcell "2026arena1", 44, 99, 44, 99, cell_walkable, .@v;
+		setcell "2026arena1", 55, 99, 55, 99, cell_walkable, .@v;
+		setcell "2026arena1", 44, 100, 44, 100, cell_walkable, .@v;
+		setcell "2026arena1", 55, 100, 55, 100, cell_walkable, .@v;
+		setcell "2026arena1", 44, 101, 44, 101, cell_walkable, .@v;
+		setcell "2026arena1", 55, 101, 55, 101, cell_walkable, .@v;
+		setcell "2026arena1", 44, 102, 44, 102, cell_walkable, .@v;
+		setcell "2026arena1", 55, 102, 55, 102, cell_walkable, .@v;
+		setcell "2026arena1", 44, 103, 44, 103, cell_walkable, .@v;
+		setcell "2026arena1", 55, 103, 55, 103, cell_walkable, .@v;
+		setcell "2026arena1", 44, 104, 44, 104, cell_walkable, .@v;
+		setcell "2026arena1", 55, 104, 55, 104, cell_walkable, .@v;
+		setcell "2026arena1", 44, 105, 44, 105, cell_walkable, .@v;
+		setcell "2026arena1", 55, 105, 55, 105, cell_walkable, .@v;
+		setcell "2026arena1", 44, 106, 55, 106, cell_walkable, .@v;
+		setcell "2026arena1", 140, 87, 150, 87, cell_walkable, .@v;
+		setcell "2026arena1", 140, 88, 140, 88, cell_walkable, .@v;
+		setcell "2026arena1", 150, 88, 150, 88, cell_walkable, .@v;
+		setcell "2026arena1", 140, 89, 140, 89, cell_walkable, .@v;
+		setcell "2026arena1", 150, 89, 150, 89, cell_walkable, .@v;
+		setcell "2026arena1", 140, 90, 140, 90, cell_walkable, .@v;
+		setcell "2026arena1", 150, 90, 150, 90, cell_walkable, .@v;
+		setcell "2026arena1", 140, 91, 140, 91, cell_walkable, .@v;
+		setcell "2026arena1", 150, 91, 150, 91, cell_walkable, .@v;
+		setcell "2026arena1", 140, 92, 140, 92, cell_walkable, .@v;
+		setcell "2026arena1", 150, 92, 150, 92, cell_walkable, .@v;
+		setcell "2026arena1", 140, 93, 140, 93, cell_walkable, .@v;
+		setcell "2026arena1", 150, 93, 150, 93, cell_walkable, .@v;
+		setcell "2026arena1", 140, 94, 140, 94, cell_walkable, .@v;
+		setcell "2026arena1", 150, 94, 150, 94, cell_walkable, .@v;
+		setcell "2026arena1", 140, 95, 140, 95, cell_walkable, .@v;
+		setcell "2026arena1", 150, 95, 150, 95, cell_walkable, .@v;
+		setcell "2026arena1", 140, 96, 140, 96, cell_walkable, .@v;
+		setcell "2026arena1", 150, 96, 150, 96, cell_walkable, .@v;
+		setcell "2026arena1", 140, 97, 140, 97, cell_walkable, .@v;
+		setcell "2026arena1", 150, 97, 150, 97, cell_walkable, .@v;
+		setcell "2026arena1", 140, 98, 140, 98, cell_walkable, .@v;
+		setcell "2026arena1", 150, 98, 150, 98, cell_walkable, .@v;
+		setcell "2026arena1", 140, 99, 140, 99, cell_walkable, .@v;
+		setcell "2026arena1", 150, 99, 150, 99, cell_walkable, .@v;
+		setcell "2026arena1", 140, 100, 140, 100, cell_walkable, .@v;
+		setcell "2026arena1", 150, 100, 150, 100, cell_walkable, .@v;
+		setcell "2026arena1", 140, 101, 140, 101, cell_walkable, .@v;
+		setcell "2026arena1", 150, 101, 150, 101, cell_walkable, .@v;
+		setcell "2026arena1", 140, 102, 140, 102, cell_walkable, .@v;
+		setcell "2026arena1", 150, 102, 150, 102, cell_walkable, .@v;
+		setcell "2026arena1", 140, 103, 140, 103, cell_walkable, .@v;
+		setcell "2026arena1", 150, 103, 150, 103, cell_walkable, .@v;
+		setcell "2026arena1", 140, 104, 140, 104, cell_walkable, .@v;
+		setcell "2026arena1", 150, 104, 150, 104, cell_walkable, .@v;
+		setcell "2026arena1", 140, 105, 140, 105, cell_walkable, .@v;
+		setcell "2026arena1", 150, 105, 150, 105, cell_walkable, .@v;
+		setcell "2026arena1", 140, 106, 150, 106, cell_walkable, .@v;
+		break;
+	case 2:
+		setcell "2026arena2", 29, 82, 39, 82, cell_walkable, .@v;
+		setcell "2026arena2", 29, 83, 29, 83, cell_walkable, .@v;
+		setcell "2026arena2", 39, 83, 39, 83, cell_walkable, .@v;
+		setcell "2026arena2", 29, 84, 29, 84, cell_walkable, .@v;
+		setcell "2026arena2", 39, 84, 39, 84, cell_walkable, .@v;
+		setcell "2026arena2", 29, 85, 29, 85, cell_walkable, .@v;
+		setcell "2026arena2", 39, 85, 39, 85, cell_walkable, .@v;
+		setcell "2026arena2", 29, 86, 29, 86, cell_walkable, .@v;
+		setcell "2026arena2", 39, 86, 39, 86, cell_walkable, .@v;
+		setcell "2026arena2", 29, 87, 29, 87, cell_walkable, .@v;
+		setcell "2026arena2", 39, 87, 39, 87, cell_walkable, .@v;
+		setcell "2026arena2", 29, 88, 29, 88, cell_walkable, .@v;
+		setcell "2026arena2", 39, 88, 39, 88, cell_walkable, .@v;
+		setcell "2026arena2", 29, 89, 29, 89, cell_walkable, .@v;
+		setcell "2026arena2", 39, 89, 39, 89, cell_walkable, .@v;
+		setcell "2026arena2", 29, 90, 29, 90, cell_walkable, .@v;
+		setcell "2026arena2", 39, 90, 39, 90, cell_walkable, .@v;
+		setcell "2026arena2", 29, 91, 29, 91, cell_walkable, .@v;
+		setcell "2026arena2", 39, 91, 39, 91, cell_walkable, .@v;
+		setcell "2026arena2", 29, 92, 29, 92, cell_walkable, .@v;
+		setcell "2026arena2", 39, 92, 39, 92, cell_walkable, .@v;
+		setcell "2026arena2", 29, 93, 29, 93, cell_walkable, .@v;
+		setcell "2026arena2", 39, 93, 39, 93, cell_walkable, .@v;
+		setcell "2026arena2", 29, 94, 29, 94, cell_walkable, .@v;
+		setcell "2026arena2", 39, 94, 39, 94, cell_walkable, .@v;
+		setcell "2026arena2", 29, 95, 29, 95, cell_walkable, .@v;
+		setcell "2026arena2", 39, 95, 39, 95, cell_walkable, .@v;
+		setcell "2026arena2", 29, 96, 29, 96, cell_walkable, .@v;
+		setcell "2026arena2", 39, 96, 39, 96, cell_walkable, .@v;
+		setcell "2026arena2", 29, 97, 29, 97, cell_walkable, .@v;
+		setcell "2026arena2", 39, 97, 39, 97, cell_walkable, .@v;
+		setcell "2026arena2", 29, 98, 29, 98, cell_walkable, .@v;
+		setcell "2026arena2", 39, 98, 39, 98, cell_walkable, .@v;
+		setcell "2026arena2", 29, 99, 29, 99, cell_walkable, .@v;
+		setcell "2026arena2", 39, 99, 39, 99, cell_walkable, .@v;
+		setcell "2026arena2", 29, 100, 29, 100, cell_walkable, .@v;
+		setcell "2026arena2", 39, 100, 39, 100, cell_walkable, .@v;
+		setcell "2026arena2", 29, 101, 29, 101, cell_walkable, .@v;
+		setcell "2026arena2", 39, 101, 39, 101, cell_walkable, .@v;
+		setcell "2026arena2", 29, 102, 29, 102, cell_walkable, .@v;
+		setcell "2026arena2", 39, 102, 39, 102, cell_walkable, .@v;
+		setcell "2026arena2", 29, 103, 29, 103, cell_walkable, .@v;
+		setcell "2026arena2", 39, 103, 39, 103, cell_walkable, .@v;
+		setcell "2026arena2", 29, 104, 29, 104, cell_walkable, .@v;
+		setcell "2026arena2", 39, 104, 39, 104, cell_walkable, .@v;
+		setcell "2026arena2", 29, 105, 29, 105, cell_walkable, .@v;
+		setcell "2026arena2", 39, 105, 39, 105, cell_walkable, .@v;
+		setcell "2026arena2", 29, 106, 39, 106, cell_walkable, .@v;
+		setcell "2026arena2", 160, 82, 170, 82, cell_walkable, .@v;
+		setcell "2026arena2", 160, 83, 160, 83, cell_walkable, .@v;
+		setcell "2026arena2", 170, 83, 170, 83, cell_walkable, .@v;
+		setcell "2026arena2", 160, 84, 160, 84, cell_walkable, .@v;
+		setcell "2026arena2", 170, 84, 170, 84, cell_walkable, .@v;
+		setcell "2026arena2", 160, 85, 160, 85, cell_walkable, .@v;
+		setcell "2026arena2", 170, 85, 170, 85, cell_walkable, .@v;
+		setcell "2026arena2", 160, 86, 160, 86, cell_walkable, .@v;
+		setcell "2026arena2", 170, 86, 170, 86, cell_walkable, .@v;
+		setcell "2026arena2", 160, 87, 160, 87, cell_walkable, .@v;
+		setcell "2026arena2", 170, 87, 170, 87, cell_walkable, .@v;
+		setcell "2026arena2", 160, 88, 160, 88, cell_walkable, .@v;
+		setcell "2026arena2", 170, 88, 170, 88, cell_walkable, .@v;
+		setcell "2026arena2", 160, 89, 160, 89, cell_walkable, .@v;
+		setcell "2026arena2", 170, 89, 170, 89, cell_walkable, .@v;
+		setcell "2026arena2", 160, 90, 160, 90, cell_walkable, .@v;
+		setcell "2026arena2", 170, 90, 170, 90, cell_walkable, .@v;
+		setcell "2026arena2", 160, 91, 160, 91, cell_walkable, .@v;
+		setcell "2026arena2", 170, 91, 170, 91, cell_walkable, .@v;
+		setcell "2026arena2", 160, 92, 160, 92, cell_walkable, .@v;
+		setcell "2026arena2", 170, 92, 170, 92, cell_walkable, .@v;
+		setcell "2026arena2", 160, 93, 160, 93, cell_walkable, .@v;
+		setcell "2026arena2", 170, 93, 170, 93, cell_walkable, .@v;
+		setcell "2026arena2", 160, 94, 160, 94, cell_walkable, .@v;
+		setcell "2026arena2", 170, 94, 170, 94, cell_walkable, .@v;
+		setcell "2026arena2", 160, 95, 160, 95, cell_walkable, .@v;
+		setcell "2026arena2", 170, 95, 170, 95, cell_walkable, .@v;
+		setcell "2026arena2", 160, 96, 160, 96, cell_walkable, .@v;
+		setcell "2026arena2", 170, 96, 170, 96, cell_walkable, .@v;
+		setcell "2026arena2", 160, 97, 160, 97, cell_walkable, .@v;
+		setcell "2026arena2", 170, 97, 170, 97, cell_walkable, .@v;
+		setcell "2026arena2", 160, 98, 160, 98, cell_walkable, .@v;
+		setcell "2026arena2", 170, 98, 170, 98, cell_walkable, .@v;
+		setcell "2026arena2", 160, 99, 160, 99, cell_walkable, .@v;
+		setcell "2026arena2", 170, 99, 170, 99, cell_walkable, .@v;
+		setcell "2026arena2", 160, 100, 160, 100, cell_walkable, .@v;
+		setcell "2026arena2", 170, 100, 170, 100, cell_walkable, .@v;
+		setcell "2026arena2", 160, 101, 160, 101, cell_walkable, .@v;
+		setcell "2026arena2", 170, 101, 170, 101, cell_walkable, .@v;
+		setcell "2026arena2", 160, 102, 160, 102, cell_walkable, .@v;
+		setcell "2026arena2", 170, 102, 170, 102, cell_walkable, .@v;
+		setcell "2026arena2", 160, 103, 160, 103, cell_walkable, .@v;
+		setcell "2026arena2", 170, 103, 170, 103, cell_walkable, .@v;
+		setcell "2026arena2", 160, 104, 160, 104, cell_walkable, .@v;
+		setcell "2026arena2", 170, 104, 170, 104, cell_walkable, .@v;
+		setcell "2026arena2", 160, 105, 160, 105, cell_walkable, .@v;
+		setcell "2026arena2", 170, 105, 170, 105, cell_walkable, .@v;
+		setcell "2026arena2", 160, 106, 170, 106, cell_walkable, .@v;
+		break;
+	case 3:
+		setcell "2026arena3", 36, 83, 46, 83, cell_walkable, .@v;
+		setcell "2026arena3", 36, 84, 36, 84, cell_walkable, .@v;
+		setcell "2026arena3", 46, 84, 46, 84, cell_walkable, .@v;
+		setcell "2026arena3", 36, 85, 36, 85, cell_walkable, .@v;
+		setcell "2026arena3", 46, 85, 46, 85, cell_walkable, .@v;
+		setcell "2026arena3", 36, 86, 36, 86, cell_walkable, .@v;
+		setcell "2026arena3", 46, 86, 46, 86, cell_walkable, .@v;
+		setcell "2026arena3", 36, 87, 36, 87, cell_walkable, .@v;
+		setcell "2026arena3", 46, 87, 46, 87, cell_walkable, .@v;
+		setcell "2026arena3", 36, 88, 36, 88, cell_walkable, .@v;
+		setcell "2026arena3", 46, 88, 46, 88, cell_walkable, .@v;
+		setcell "2026arena3", 36, 89, 36, 89, cell_walkable, .@v;
+		setcell "2026arena3", 46, 89, 46, 89, cell_walkable, .@v;
+		setcell "2026arena3", 36, 90, 36, 90, cell_walkable, .@v;
+		setcell "2026arena3", 46, 90, 46, 90, cell_walkable, .@v;
+		setcell "2026arena3", 36, 91, 36, 91, cell_walkable, .@v;
+		setcell "2026arena3", 46, 91, 46, 91, cell_walkable, .@v;
+		setcell "2026arena3", 36, 92, 36, 92, cell_walkable, .@v;
+		setcell "2026arena3", 46, 92, 46, 92, cell_walkable, .@v;
+		setcell "2026arena3", 36, 93, 36, 93, cell_walkable, .@v;
+		setcell "2026arena3", 46, 93, 46, 93, cell_walkable, .@v;
+		setcell "2026arena3", 36, 94, 36, 94, cell_walkable, .@v;
+		setcell "2026arena3", 46, 94, 46, 94, cell_walkable, .@v;
+		setcell "2026arena3", 36, 95, 36, 95, cell_walkable, .@v;
+		setcell "2026arena3", 46, 95, 46, 95, cell_walkable, .@v;
+		setcell "2026arena3", 36, 96, 36, 96, cell_walkable, .@v;
+		setcell "2026arena3", 46, 96, 46, 96, cell_walkable, .@v;
+		setcell "2026arena3", 36, 97, 36, 97, cell_walkable, .@v;
+		setcell "2026arena3", 46, 97, 46, 97, cell_walkable, .@v;
+		setcell "2026arena3", 36, 98, 36, 98, cell_walkable, .@v;
+		setcell "2026arena3", 46, 98, 46, 98, cell_walkable, .@v;
+		setcell "2026arena3", 36, 99, 36, 99, cell_walkable, .@v;
+		setcell "2026arena3", 46, 99, 46, 99, cell_walkable, .@v;
+		setcell "2026arena3", 36, 100, 36, 100, cell_walkable, .@v;
+		setcell "2026arena3", 46, 100, 46, 100, cell_walkable, .@v;
+		setcell "2026arena3", 36, 101, 36, 101, cell_walkable, .@v;
+		setcell "2026arena3", 46, 101, 46, 101, cell_walkable, .@v;
+		setcell "2026arena3", 36, 102, 36, 102, cell_walkable, .@v;
+		setcell "2026arena3", 46, 102, 46, 102, cell_walkable, .@v;
+		setcell "2026arena3", 36, 103, 36, 103, cell_walkable, .@v;
+		setcell "2026arena3", 46, 103, 46, 103, cell_walkable, .@v;
+		setcell "2026arena3", 36, 104, 36, 104, cell_walkable, .@v;
+		setcell "2026arena3", 46, 104, 46, 104, cell_walkable, .@v;
+		setcell "2026arena3", 36, 105, 36, 105, cell_walkable, .@v;
+		setcell "2026arena3", 46, 105, 46, 105, cell_walkable, .@v;
+		setcell "2026arena3", 36, 106, 36, 106, cell_walkable, .@v;
+		setcell "2026arena3", 46, 106, 46, 106, cell_walkable, .@v;
+		setcell "2026arena3", 36, 107, 46, 107, cell_walkable, .@v;
+		setcell "2026arena3", 155, 83, 165, 83, cell_walkable, .@v;
+		setcell "2026arena3", 155, 84, 155, 84, cell_walkable, .@v;
+		setcell "2026arena3", 165, 84, 165, 84, cell_walkable, .@v;
+		setcell "2026arena3", 155, 85, 155, 85, cell_walkable, .@v;
+		setcell "2026arena3", 165, 85, 165, 85, cell_walkable, .@v;
+		setcell "2026arena3", 155, 86, 155, 86, cell_walkable, .@v;
+		setcell "2026arena3", 165, 86, 165, 86, cell_walkable, .@v;
+		setcell "2026arena3", 155, 87, 155, 87, cell_walkable, .@v;
+		setcell "2026arena3", 165, 87, 165, 87, cell_walkable, .@v;
+		setcell "2026arena3", 155, 88, 155, 88, cell_walkable, .@v;
+		setcell "2026arena3", 165, 88, 165, 88, cell_walkable, .@v;
+		setcell "2026arena3", 155, 89, 155, 89, cell_walkable, .@v;
+		setcell "2026arena3", 165, 89, 165, 89, cell_walkable, .@v;
+		setcell "2026arena3", 155, 90, 155, 90, cell_walkable, .@v;
+		setcell "2026arena3", 165, 90, 165, 90, cell_walkable, .@v;
+		setcell "2026arena3", 155, 91, 155, 91, cell_walkable, .@v;
+		setcell "2026arena3", 165, 91, 165, 91, cell_walkable, .@v;
+		setcell "2026arena3", 155, 92, 155, 92, cell_walkable, .@v;
+		setcell "2026arena3", 165, 92, 165, 92, cell_walkable, .@v;
+		setcell "2026arena3", 155, 93, 155, 93, cell_walkable, .@v;
+		setcell "2026arena3", 165, 93, 165, 93, cell_walkable, .@v;
+		setcell "2026arena3", 155, 94, 155, 94, cell_walkable, .@v;
+		setcell "2026arena3", 165, 94, 165, 94, cell_walkable, .@v;
+		setcell "2026arena3", 155, 95, 155, 95, cell_walkable, .@v;
+		setcell "2026arena3", 165, 95, 165, 95, cell_walkable, .@v;
+		setcell "2026arena3", 155, 96, 155, 96, cell_walkable, .@v;
+		setcell "2026arena3", 165, 96, 165, 96, cell_walkable, .@v;
+		setcell "2026arena3", 155, 97, 155, 97, cell_walkable, .@v;
+		setcell "2026arena3", 165, 97, 165, 97, cell_walkable, .@v;
+		setcell "2026arena3", 155, 98, 155, 98, cell_walkable, .@v;
+		setcell "2026arena3", 165, 98, 165, 98, cell_walkable, .@v;
+		setcell "2026arena3", 155, 99, 155, 99, cell_walkable, .@v;
+		setcell "2026arena3", 165, 99, 165, 99, cell_walkable, .@v;
+		setcell "2026arena3", 155, 100, 155, 100, cell_walkable, .@v;
+		setcell "2026arena3", 165, 100, 165, 100, cell_walkable, .@v;
+		setcell "2026arena3", 155, 101, 155, 101, cell_walkable, .@v;
+		setcell "2026arena3", 165, 101, 165, 101, cell_walkable, .@v;
+		setcell "2026arena3", 155, 102, 155, 102, cell_walkable, .@v;
+		setcell "2026arena3", 165, 102, 165, 102, cell_walkable, .@v;
+		setcell "2026arena3", 155, 103, 155, 103, cell_walkable, .@v;
+		setcell "2026arena3", 165, 103, 165, 103, cell_walkable, .@v;
+		setcell "2026arena3", 155, 104, 155, 104, cell_walkable, .@v;
+		setcell "2026arena3", 165, 104, 165, 104, cell_walkable, .@v;
+		setcell "2026arena3", 155, 105, 155, 105, cell_walkable, .@v;
+		setcell "2026arena3", 165, 105, 165, 105, cell_walkable, .@v;
+		setcell "2026arena3", 155, 106, 155, 106, cell_walkable, .@v;
+		setcell "2026arena3", 165, 106, 165, 106, cell_walkable, .@v;
+		setcell "2026arena3", 155, 107, 165, 107, cell_walkable, .@v;
+		break;
+	case 4:
+		setcell "2026arena4", 200, 204, 212, 204, cell_walkable, .@v;
+		setcell "2026arena4", 200, 205, 200, 205, cell_walkable, .@v;
+		setcell "2026arena4", 212, 205, 212, 205, cell_walkable, .@v;
+		setcell "2026arena4", 200, 206, 200, 206, cell_walkable, .@v;
+		setcell "2026arena4", 212, 206, 212, 206, cell_walkable, .@v;
+		setcell "2026arena4", 200, 207, 200, 207, cell_walkable, .@v;
+		setcell "2026arena4", 212, 207, 212, 207, cell_walkable, .@v;
+		setcell "2026arena4", 200, 208, 200, 208, cell_walkable, .@v;
+		setcell "2026arena4", 212, 208, 212, 208, cell_walkable, .@v;
+		setcell "2026arena4", 200, 209, 200, 209, cell_walkable, .@v;
+		setcell "2026arena4", 212, 209, 212, 209, cell_walkable, .@v;
+		setcell "2026arena4", 200, 210, 200, 210, cell_walkable, .@v;
+		setcell "2026arena4", 212, 210, 212, 210, cell_walkable, .@v;
+		setcell "2026arena4", 200, 211, 200, 211, cell_walkable, .@v;
+		setcell "2026arena4", 212, 211, 212, 211, cell_walkable, .@v;
+		setcell "2026arena4", 200, 212, 200, 212, cell_walkable, .@v;
+		setcell "2026arena4", 212, 212, 212, 212, cell_walkable, .@v;
+		setcell "2026arena4", 200, 213, 200, 213, cell_walkable, .@v;
+		setcell "2026arena4", 212, 213, 212, 213, cell_walkable, .@v;
+		setcell "2026arena4", 200, 214, 212, 214, cell_walkable, .@v;
+		setcell "2026arena4", 287, 204, 299, 204, cell_walkable, .@v;
+		setcell "2026arena4", 287, 205, 287, 205, cell_walkable, .@v;
+		setcell "2026arena4", 299, 205, 299, 205, cell_walkable, .@v;
+		setcell "2026arena4", 287, 206, 287, 206, cell_walkable, .@v;
+		setcell "2026arena4", 299, 206, 299, 206, cell_walkable, .@v;
+		setcell "2026arena4", 287, 207, 287, 207, cell_walkable, .@v;
+		setcell "2026arena4", 299, 207, 299, 207, cell_walkable, .@v;
+		setcell "2026arena4", 287, 208, 287, 208, cell_walkable, .@v;
+		setcell "2026arena4", 299, 208, 299, 208, cell_walkable, .@v;
+		setcell "2026arena4", 287, 209, 287, 209, cell_walkable, .@v;
+		setcell "2026arena4", 299, 209, 299, 209, cell_walkable, .@v;
+		setcell "2026arena4", 287, 210, 287, 210, cell_walkable, .@v;
+		setcell "2026arena4", 299, 210, 299, 210, cell_walkable, .@v;
+		setcell "2026arena4", 287, 211, 287, 211, cell_walkable, .@v;
+		setcell "2026arena4", 299, 211, 299, 211, cell_walkable, .@v;
+		setcell "2026arena4", 287, 212, 287, 212, cell_walkable, .@v;
+		setcell "2026arena4", 299, 212, 299, 212, cell_walkable, .@v;
+		setcell "2026arena4", 287, 213, 287, 213, cell_walkable, .@v;
+		setcell "2026arena4", 299, 213, 299, 213, cell_walkable, .@v;
+		setcell "2026arena4", 287, 214, 299, 214, cell_walkable, .@v;
+		break;
+	}
+	return;
+
+// ---------------------------------------------------------
+// members: team 0 = party A, 1 = party B; returns the account id (0 = none)
+// ---------------------------------------------------------
+L_Member:
+	if (getarg(1) == 0)
+		return $@ar_ma[getarg(0) * 10 + getarg(2)];
+	return $@ar_mb[getarg(0) * 10 + getarg(2)];
+
+// ---------------------------------------------------------
+// set-up of a round: revive, heal, clean, warp to the start (sides swap every round), freeze, countdown
+// ---------------------------------------------------------
+L_Prep:
+	.@s = getarg(0);
+	callsub L_Walls, .@s, 0;
+	.@flip = ($@ar_round[.@s] % 2 == 0) ? 1 : 0;
+	.@on0 = 0;
+	.@on1 = 0;
+	for (.@t = 0; .@t <= 1; .@t++) {
+		for (.@k = 0; .@k < .team; .@k++) {
+			.@a = callsub(L_Member, .@s, .@t, .@k);
+			if (!.@a || !isloggedin(.@a))
+				continue;
+			if (!attachrid(.@a))
+				continue;
+			if (.@t == 0) .@on0++; else .@on1++;
+			recovery 0, getcharid(0);
+			sc_end SC_ALL;
+			percentheal 100, 100;
+			if ((.@t ^ .@flip) == 0)
+				warp .map$[.@s], .wx[.@s], .wy[.@s];
+			else
+				warp .map$[.@s], .ex[.@s], .ey[.@s];
+			// AP after the warp (a map change is the last thing that could touch it); healap goes through status_heal like every other heal
+			healap MaxAp;
+			detachrid;
+		}
+	}
+	// a party that is gone loses by forfeit; nobody left ends the match
+	if (!.@on0 || !.@on1) {
+		$@ar_fin[.@s] = 1;
+		if (!.@on0 && .@on1)
+			$@ar_sc_b[.@s] = .wins;
+		else if (.@on0 && !.@on1)
+			$@ar_sc_a[.@s] = .wins;
+		callsub L_Walls, .@s, 1;
+		callsub L_EndMatch, .@s;
+		return;
+	}
+	$@ar_alive_a[.@s] = .@on0;
+	$@ar_alive_b[.@s] = .@on1;
+	$@ar_state[.@s] = 1;
+	$@ar_t[.@s] = .countdown;
+	mapannounce .map$[.@s], "Preparation: " + .countdown + " seconds. Move only inside your area and use your buffs.", 0, 0x00FFFF;
+	mapannounce .map$[.@s], "Round " + $@ar_round[.@s] + " - " + getpartyname($@ar_pa[.@s]) + " " + $@ar_sc_a[.@s] + " : " + $@ar_sc_b[.@s] + " " + getpartyname($@ar_pb[.@s]), 0, 0xFFFF00;
+	return;
+
+// ---------------------------------------------------------
+// one tick of a running arena
+// ---------------------------------------------------------
+L_Slot:
+	.@s = getarg(0);
+	.@st = $@ar_state[.@s];
+	if (.@st == 1) {
+		if ($@ar_t[.@s] > 0) {
+			if ($@ar_t[.@s] <= 5 || $@ar_t[.@s] % 5 == 0)
+				mapannounce .map$[.@s], "The round starts in " + $@ar_t[.@s] + "...", 0, 0xFFFFFF;
+			$@ar_t[.@s]--;
+		} else {
+			callsub L_StartRound, .@s;
+		}
+	} else if (.@st == 2) {
+		$@ar_t[.@s]--;
+		.@aa = callsub(L_Alive, .@s, 0);
+		.@ab = callsub(L_Alive, .@s, 1);
+		if (.@aa != $@ar_alive_a[.@s] || .@ab != $@ar_alive_b[.@s]) {		// live scoreboard: only announces when someone dies / reconnects
+			$@ar_alive_a[.@s] = .@aa;
+			$@ar_alive_b[.@s] = .@ab;
+			mapannounce .map$[.@s], getpartyname($@ar_pa[.@s]) + " " + .@aa + " - " + .@ab + " " + getpartyname($@ar_pb[.@s]) + " alive", 0, 0x00FFFF;
+		}
+		if (!.@aa || !.@ab || $@ar_t[.@s] <= 0)
+			callsub L_EndRound, .@s, .@aa, .@ab;
+	} else if (.@st == 3) {
+		if ($@ar_t[.@s] > 0) {
+			$@ar_t[.@s]--;
+		} else if ($@ar_fin[.@s]) {
+			callsub L_Finish, .@s;
+		} else {
+			callsub L_Prep, .@s;
+		}
+	}
+	return;
+
+L_StartRound:
+	.@s = getarg(0);
+	callsub L_Walls, .@s, 1;
+	$@ar_state[.@s] = 2;
+	$@ar_t[.@s] = .roundtime;
+	for (.@t = 0; .@t <= 1; .@t++) {
+		for (.@k = 0; .@k < .team; .@k++) {
+			.@a = callsub(L_Member, .@s, .@t, .@k);
+			if (.@a && isloggedin(.@a) && attachrid(.@a)) {
+				showdigit .roundtime, 2;		// live MM:SS clock at the top of the screen, like a PVP room; the client ticks it down on its own
+				detachrid;
+			}
+		}
+	}
+	mapannounce .map$[.@s], "FIGHT!", 0, 0xFF0000;
+	return;
+
+// members of a team that are alive and still inside the arena map
+L_Alive:
+	.@s = getarg(0);
+	.@c = 0;
+	for (.@k = 0; .@k < .team; .@k++) {
+		.@a = callsub(L_Member, .@s, getarg(1), .@k);
+		if (!.@a || !isloggedin(.@a) || isdead(.@a))
+			continue;
+		if (attachrid(.@a)) {
+			if (strcharinfo(3) == .map$[.@s])
+				.@c++;
+			detachrid;
+		}
+	}
+	return .@c;
+
+// sum of HP% of the living members of a team (tie-break when the time runs out)
+L_HpSum:
+	.@s = getarg(0);
+	.@sum = 0;
+	for (.@k = 0; .@k < .team; .@k++) {
+		.@a = callsub(L_Member, .@s, getarg(1), .@k);
+		if (!.@a || !isloggedin(.@a) || isdead(.@a))
+			continue;
+		if (attachrid(.@a)) {
+			if (strcharinfo(3) == .map$[.@s] && MaxHp > 0)
+				.@sum += Hp * 100 / MaxHp;
+			detachrid;
+		}
+	}
+	return .@sum;
+
+L_EndRound:
+	.@s = getarg(0);
+	.@aa = getarg(1);
+	.@ab = getarg(2);
+	for (.@t = 0; .@t <= 1; .@t++) {		// stop the round clock right as the round ends (it would otherwise keep counting past 0)
+		for (.@k = 0; .@k < .team; .@k++) {
+			.@a = callsub(L_Member, .@s, .@t, .@k);
+			if (.@a && isloggedin(.@a) && attachrid(.@a)) {
+				showdigit 0;
+				detachrid;
+			}
+		}
+	}
+	.@win = 0;
+	if (.@aa > .@ab)
+		.@win = 1;
+	else if (.@ab > .@aa)
+		.@win = 2;
+	else {
+		.@ha = callsub(L_HpSum, .@s, 0);
+		.@hb = callsub(L_HpSum, .@s, 1);
+		if (.@ha > .@hb) .@win = 1;
+		else if (.@hb > .@ha) .@win = 2;
+	}
+	if (.@win == 1) {
+		$@ar_sc_a[.@s]++;
+		mapannounce .map$[.@s], "Round " + $@ar_round[.@s] + ": " + getpartyname($@ar_pa[.@s]) + " wins the round!", 0, 0x00FF00;
+	} else if (.@win == 2) {
+		$@ar_sc_b[.@s]++;
+		mapannounce .map$[.@s], "Round " + $@ar_round[.@s] + ": " + getpartyname($@ar_pb[.@s]) + " wins the round!", 0, 0x00FF00;
+	} else {
+		mapannounce .map$[.@s], "Round " + $@ar_round[.@s] + ": draw - the round is replayed.", 0, 0x00FF00;
+	}
+	// everybody stays where they are, but nobody can be hurt any more
+	if ($@ar_sc_a[.@s] >= .wins || $@ar_sc_b[.@s] >= .wins || $@ar_round[.@s] >= .maxrounds) {
+		callsub L_EndMatch, .@s;
+	} else {
+		$@ar_round[.@s]++;
+		$@ar_state[.@s] = 3;
+		$@ar_t[.@s] = .between;
+		$@ar_fin[.@s] = 0;
+	}
+	return;
+
+L_EndMatch:
+	.@s = getarg(0);
+	callsub L_Walls, .@s, 1;
+	if ($@ar_sc_a[.@s] > $@ar_sc_b[.@s])
+		.@msg$ = getpartyname($@ar_pa[.@s]) + " wins the match " + $@ar_sc_a[.@s] + " - " + $@ar_sc_b[.@s] + "!";
+	else if ($@ar_sc_b[.@s] > $@ar_sc_a[.@s])
+		.@msg$ = getpartyname($@ar_pb[.@s]) + " wins the match " + $@ar_sc_b[.@s] + " - " + $@ar_sc_a[.@s] + "!";
+	else
+		.@msg$ = "The match ends in a draw " + $@ar_sc_a[.@s] + " - " + $@ar_sc_b[.@s] + ".";
+	announce "[Arena " + .@s + "] " + .@msg$, bc_all, 0x00FFAA;
+	mapannounce .map$[.@s], .@msg$, 0, 0x00FF00;
+	$@ar_fin[.@s] = 1;
+	$@ar_state[.@s] = 3;
+	$@ar_t[.@s] = .endwait;
+	return;
+
+// after the match: everybody back to the lobby, healed, and the arena is free again
+L_Finish:
+	.@s = getarg(0);
+	for (.@t = 0; .@t <= 1; .@t++) {
+		for (.@k = 0; .@k < .team; .@k++) {
+			.@a = callsub(L_Member, .@s, .@t, .@k);
+			if (!.@a || !isloggedin(.@a) || !attachrid(.@a))
+				continue;
+			pcblockmove getcharid(3), 0;
+			if (strcharinfo(3) == .map$[.@s]) {
+				recovery 0, getcharid(0);
+				sc_end SC_ALL;
+				percentheal 100, 100;
+				warp .lobby$, .lx, .ly;
+				healap MaxAp;
+			}
+			detachrid;
+		}
+	}
+	$@ar_state[.@s] = 0;
+	$@ar_pa[.@s] = 0;
+	$@ar_pb[.@s] = 0;
+	callsub L_Queue;
+	return;
+}

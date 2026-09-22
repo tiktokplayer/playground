@@ -1,0 +1,7294 @@
+# This file is a part of rAthena.
+#   Copyright(C) 2021 rAthena Development Team
+#   https://rathena.org - https://github.com/rathena
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+###########################################################################
+# Item Database
+###########################################################################
+#
+# Item Settings
+#
+###########################################################################
+# - Id                      Item ID.
+#   AegisName               Server name to reference the item in scripts and lookups, should use no spaces.
+#   Name                    Name in English for displaying as output.
+#   Type                    Item type. (Default: Etc)
+#   SubType                 Weapon, Ammo or Card type. (Default: 0)
+#   Buy                     Buying price. When not specified, becomes double the sell price. (Default: 0)
+#   Sell                    Selling price. When not specified, becomes half the buy price. (Default: 0)
+#   Weight                  Item weight. Each 10 is 1 weight. (Default: 0)
+#   Attack                  Weapon's attack. (Default: 0)
+#   MagicAttack             Weapon's magic attack. (Default: 0)
+#   Defense                 Armor's defense. (Default: 0)
+#   Range                   Weapon's attack range. (Default: 0)
+#   Slots                   Available slots in item. (Default: 0)
+#   Jobs                    Jobs that can equip the item. (Map default is 'All: true')
+#   Classes                 Upper class types that can equip the item. (Map default is 'All: true')
+#   Gender                  Gender that can equip the item. (Default: Both)
+#   Locations               Equipment's placement. (Default: None)
+#   WeaponLevel             Weapon level. (Default: 1 for Weapons)
+#   ArmorLevel              Armor level. (Default: 1 for Armors)
+#   EquipLevelMin           Minimum required level to equip. (Default: 0)
+#   EquipLevelMax           Maximum level that can equip. (Default: 0)
+#   Refineable              If the item can be refined. (Default: false)
+#   Gradable                If the item can be graded. (Default: false)
+#   View                    View sprite of an item. (Default: 0)
+#   AliasName               Another item's AegisName that will be sent to the client instead of this item's AegisName. (Default: null)
+#   Flags:                  Item flags. (Default: null)
+#     BuyingStore           If the item is available for Buyingstores. (Default: false)
+#     DeadBranch            If the item is a Dead Branch. (Default: false)
+#     Container             If the item is part of a container. (Default: false)
+#     UniqueId              If the item is a unique stack. (Default: false)
+#     BindOnEquip           If the item is bound to the character upon equipping. (Default: false)
+#     DropAnnounce          If the item has a special announcement to self on drop. (Default: false)
+#     NoConsume             If the item is consumed on use. (Default: false)
+#     DropEffect            If the item has a special effect on the ground when dropped by a monster. (Default: None)
+#   Delay:                  Item use delay. (Default: null)
+#     Duration              Duration of delay in seconds.
+#     Status                Status Change used to track delay. (Default: None)
+#   Stack:                  Item stack amount. (Default: null)
+#     Amount                Maximum amount that can be stacked.
+#     Inventory             If the stack is applied to player's inventory. (Default: true)
+#     Cart                  If the stack is applied to the player's cart. (Default: false)
+#     Storage               If the stack is applied to the player's storage. (Default: false)
+#     GuildStorage          If the stack is applied to the player's guild storage. (Default: false)
+#   NoUse:                  Conditions when the item is unusable. (Default: null)
+#     Override              Group level to override these conditions. (Default: 100)
+#     Sitting               If the item can not be used while sitting. (Default: false)
+#   Trade:                  Trade restrictions. (Default: null)
+#     Override              Group level to override these conditions. (Default: 100)
+#     NoDrop                If the item can not be dropped. (Default: false)
+#     NoTrade               If the item can not be traded. (Default: false)
+#     TradePartner          If the item can not be traded to the player's partner. (Default: false)
+#     NoSell                If the item can not be sold. (Default: false)
+#     NoCart                If the item can not be put in a cart. (Default: false)
+#     NoStorage             If the item can not be put in a storage. (Default: false)
+#     NoGuildStorage        If the item can not be put in a guild storage. (Default: false)
+#     NoMail                If the item can not be put in a mail. (Default: false)
+#     NoAuction             If the item can not be put in an auction. (Default: false)
+#   Script                  Script to execute when the item is used/equipped. (Default: null)
+#   EquipScript             Script to execute when the item is equipped. (Default: null)
+#   UnEquipScript           Script to execute when the item is unequipped or when a rental item expires. (Default: null)
+###########################################################################
+
+Header:
+  Type: ITEM_DB
+  Version: 3
+
+#Body:
+# THQ Quest Items
+#=============================================================
+#  - Id: 1998
+#    AegisName: Jeramiah's_Jur
+#    Name: Jeramiah's Jur
+#    Type: Etc
+#    Sell: 10
+#    Weight: 10
+#    AliasName: Jur
+#  - Id: 1999
+#    AegisName: Zed's_Staff
+#    Name: Zed's Staff
+#    Type: Etc
+#    Sell: 10
+#    Weight: 10
+#    AliasName: Staff_Of_Soul
+#  - Id: 7950
+#    AegisName: THG_Membership
+#    Name: THG Membership
+#    Type: Etc
+#    Sell: 10
+#    Weight: 10
+#    AliasName: Foolishness_Of_Blind
+#  - Id: 7951
+#    AegisName: Gold_Tulip
+#    Name: Token Bag
+#    Type: Etc
+#    Sell: 10
+#    Weight: 10
+#    AliasName: Leather_Bag_Of_Infinity
+
+# Official Event Items that had their Effects removed after the event was completed
+#=============================================================
+#  - Id: 585
+#    AegisName: Wurst
+#    Name: Brusti
+#    Type: Delayconsume
+#    Buy: 2
+#    Weight: 40
+#    Script: |
+#      itemheal rand(15,20),0; itemskill "PR_MAGNIFICAT",3;
+#  - Id: 679
+#    AegisName: Gold_Pill
+#    Name: Pilule
+#    Type: Healing
+#    Buy: 5000
+#    Weight: 300
+#    Script: |
+#      percentheal 50,50;
+#  - Id: 2681
+#    AegisName: Republic_Ring
+#    Name: Republic Anniversary Ring
+#    Type: Armor
+#    Buy: 20
+#    Weight: 100
+#    Locations:
+#      Right_Accessory: true
+#      Left_Accessory: true
+#    Script: |
+#      bonus bAllStats,3;
+#  - Id: 5134
+#    AegisName: Pumpkin_Hat
+#    Name: Pumpkin-Head
+#    Type: Armor
+#    Buy: 20
+#    Weight: 200
+#    Defense: 2
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 206
+#    Script: |
+#      bonus2 bSubRace,RC_Demon,5;
+#  - Id: 5136
+#    AegisName: Santa's_Hat_
+#    Name: Louise's Santa Hat
+#    Type: Armor
+#    Buy: 20
+#    Weight: 100
+#    Defense: 3
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 20
+#    Script: |
+#      bonus bMdef,1; bonus bLuk,1; bonus3 bAutoSpellWhenHit,"AL_HEAL",3,50; bonus3 bAutoSpellWhenHit,"AL_BLESSING",10,50;
+#  - Id: 5145
+#    AegisName: Carnival_Joker_Jester
+#    Name: Carnival Jester
+#    Type: Armor
+#    Buy: 10
+#    Weight: 100
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 89
+#    Script: |
+#      bonus bAllStats,3;
+#  - Id: 5147
+#    AegisName: Baseball_Cap
+#    Name: Baseball Cap
+#    Type: Armor
+#    Weight: 200
+#    Defense: 3
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 216
+#    Script: |
+#      bonus2 bExpAddRace,RC_Boss,50; bonus2 bExpAddRace,RC_NonBoss,50;
+#  - Id: 5201
+#    AegisName: Party_Hat_B
+#    Name: 2nd Anniversary Party Hat
+#    Type: Armor
+#    Buy: 20
+#    Weight: 300
+#    Defense: 3
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 144
+#    Script: |
+#      bonus bAllStats,3;
+#  - Id: 5202
+#    AegisName: Pumpkin_Hat_
+#    Name: Pumpkin Hat
+#    Type: Armor
+#    Buy: 20
+#    Weight: 200
+#    Defense: 2
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 206
+#    Script: |
+#      bonus bAllStats,2; bonus2 bSubRace,RC_Demon,5; bonus3 bAddMonsterDropItem,529,RC_DemiHuman,1500;
+#  - Id: 5204
+#    AegisName: Event_Pierrot_Nose
+#    Name: Rudolf's Red Nose
+#    Type: Armor
+#    Buy: 20
+#    Weight: 100
+#    Locations:
+#      Head_Low: true
+#    View: 49
+#    Script: |
+#      bonus2 bResEff,Eff_Blind,3000; bonus2 bAddMonsterDropItem,12130,30;
+#  - Id: 5264
+#    AegisName: Aussie_Flag_Hat
+#    Name: Australian Flag Hat
+#    Type: Armor
+#    Buy: 20
+#    Weight: 500
+#    Defense: 4
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 304
+#    Script: |
+#      bonus bAllStats,2;
+#  - Id: 5356
+#    AegisName: Pumpkin_Hat_H
+#    Name: Pumpkin Hat
+#    Type: Armor
+#    Buy: 20
+#    Weight: 200
+#    Defense: 2
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 206
+#    Script: |
+#      bonus bAllStats,2; bonus2 bSubRace,RC_Demon,5; bonus2 bMagicAddRace,RC_Demon,5;
+#  - Id: 5384
+#    AegisName: Santa_Hat_1
+#    Name: Twin Pompom By JB
+#    Type: Armor
+#    Buy: 20
+#    Weight: 200
+#    Defense: 2
+#    Slots: 1
+#    Locations:
+#      Head_Top: true
+#    EquipLevelMin: 20
+#    Refineable: true
+#    View: 390
+#    Script: |
+#      bonus bLuk,3; bonus2 bResEff,Eff_Curse,2000; bonus bVariableCastrate,-2; bonus bAspdRate,4; bonus2 bAddMonsterDropItem,539,100; bonus2 bAddMonsterDropItem,529,200; bonus2 bAddMonsterDropItem,530,200; autobonus "{ bonus bCritical,10; }",10,5000;
+#  - Id: 5811
+#    AegisName: Santa_Beard
+#    Name: Santa Beard
+#    Type: Armor
+#    Buy: 20
+#    Weight: 100
+#    Defense: 5
+#    Locations:
+#      Head_Low: true
+#    View: 25
+#    Script: |
+#      bonus2 bSubRace,RC_Brute,5; bonus2 bSubRace,RC_Player_Doram,5;
+#  - Id: 11702
+#    AegisName: Moon_Cookie
+#    Name: Moon Cookie
+#    Type: Delayconsume
+#    Weight: 10
+#    Script: |
+#      sc_end SC_POISON; sc_end SC_SILENCE; sc_end SC_BLIND; sc_end SC_CONFUSION; sc_end SC_CURSE; sc_end SC_HALLUCINATION; itemskill "AL_BLESSING",7;
+#  - Id: 12131
+#    AegisName: Lucky_Potion
+#    Name: Lucky Potion
+#    Type: Healing
+#    Buy: 2
+#    Weight: 100
+#    Script: |
+#      sc_start SC_LUKFOOD,180000,15;
+#  - Id: 12143
+#    AegisName: Red_Can
+#    Name: Red Can
+#    Type: Usable
+#    Buy: 50000
+#    Weight: 300
+#    Script: |
+#      percentheal 25,25;
+
+# Event effect: Summon monster? Probably Rice_Cake. x_x
+#=============================================================
+#  - Id: 12199
+#    AegisName: Rice_Scroll
+#    Name: Rice Scroll
+#    Type: Usable
+#  - Id: 12200
+#    AegisName: Event_Cake
+#    Name: Event Cake
+#    Type: Usable
+#    Buy: 20
+#    Weight: 50
+#    Script: |
+#      itemskill "PR_MAGNIFICAT",3;
+#  - Id: 12238
+#    AegisName: New_Year_Rice_Cake_1
+#    Name: New Year Rice Cake
+#    Type: Healing
+#    Buy: 20
+#    Weight: 100
+#    Script: |
+#      percentheal 20,15; sc_start SC_STRFOOD,1200000,3; sc_start SC_INTFOOD,1200000,3; sc_start SC_LUKFOOD,1200000,3; sc_start SC_SPEEDUP1,5000,0;
+#  - Id: 12239
+#    AegisName: New_Year_Rice_Cake_2
+#    Name: New Year Rice Cake
+#    Type: Healing
+#    Buy: 20
+#    Weight: 100
+#    Script: |
+#      percentheal 20,15; sc_start SC_DEXFOOD,1200000,3; sc_start SC_AGIFOOD,1200000,3; sc_start SC_VITFOOD,1200000,3; sc_start SC_SPEEDUP1,5000,0;
+
+# iRO St. Patrick's Day Event 2008
+#=============================================================
+#  - Id: 7915
+#    AegisName: Copper_Coin_
+#    Name: Bronze Coin
+#    Type: Etc
+#    Weight: 10
+#    AliasName: Copper_Coin
+#  - Id: 7916
+#    AegisName: Silver_Coin_
+#    Name: Silver Coin
+#    Type: Etc
+#    Weight: 10
+#    AliasName: Silver_Coin
+#  - Id: 12715
+#    AegisName: Black_Treasure_Box
+#    Name: Black Treasure Chest
+#    Type: Usable
+#    Weight: 200
+#    AliasName: Treasure_Box_
+#    Script: |
+#      callfunc "F_08stpattyseventbox";
+
+# iRO Valentine's Day Event 2009
+#=============================================================
+#  - Id: 5817
+#    AegisName: Valentine_Pledge
+#    Name: Valentine's Emblem
+#    Type: Armor
+#    Buy: 10
+#    Defense: 3
+#    Locations:
+#      Right_Accessory: true
+#      Left_Accessory: true
+#    Script: |
+#      bonus bAtkRate,3; bonus bMatkRate,3; bonus bAllStats,2; bonus bFlee,10; bonus bAspd,1; bonus bMdef,3; bonus2 bSkillAtk,"AL_HEAL",10; bonus2 bSkillHeal,"AL_HEAL",10; bonus2 bSkillHeal,"AM_POTIONPITCHER",10; bonus2 bAddItemGroupHealRate,IG_Potion,10;
+#  - Id: 7946
+#    AegisName: Gold_Ring_Of_Valentine
+#    Name: Gold Ring Of Valentine
+#    Type: Etc
+#    Buy: 10
+#  - Id: 7947
+#    AegisName: Silver_Ring_Of_Valentine
+#    Name: Silver Ring Of Valentine
+#    Type: Etc
+#    Buy: 10
+#  - Id: 7948
+#    AegisName: Box
+#    Name: Box
+#    Type: Etc
+#    Buy: 10
+#    Weight: 10
+#  - Id: 12742
+#    AegisName: Valentine_Gift_Box_M
+#    Name: Valentine Gift Box
+#    Type: Usable
+#    Buy: 10
+#    Script: |
+#      getitem 7946,1;
+#  - Id: 12743
+#    AegisName: Valentine_Gift_Box_F
+#    Name: Valentine Gift Box
+#    Type: Usable
+#    Buy: 10
+#    Script: |
+#      getitem 7947,1;
+#  - Id: 12744
+#    AegisName: Chocolate_Box
+#    Name: Chocolate Box
+#    Type: Usable
+#    Buy: 10
+#    Script: |
+#      getitem 558,1;
+#  - Id: 14466
+#    AegisName: Valentine's_Emblem_Box
+#    Name: Valentine's Emblem Box
+#    Type: Usable
+#    Buy: 10
+#    Script: |
+#      getitem 5817,1;
+
+# iRO Halloween Event 2009
+#=============================================================
+#  - Id: 5668
+#    AegisName: Weird_Pumpkin_Hat
+#    Name: Weird Pumpkin Hat
+#    Type: Armor
+#    Buy: 20
+#    Defense: 5
+#    Locations:
+#      Head_Top: true
+#    Refineable: true
+#    View: 206
+#    Script: |
+#      bonus bMdef,5; bonus2 bAddMonsterDropItem,12192,2500;
+#  - Id: 6298
+#    AegisName: Pumpkin_Head_Crushed
+#    Name: Crushed Pumpkin
+#    Type: Etc
+#  - Id: 6299
+#    AegisName: Worn_Cloth_Piece
+#    Name: Worn Fabric
+#    Type: Etc
+
+# Old Tuxedo and Wedding Dress, will display the outfit when worn.
+#==================================================================
+#  - Id: 2338
+#    AegisName: Wedding_Dress
+#    Name: Wedding Dress
+#    Type: Armor
+#    Buy: 43000
+#    Weight: 500
+#    Jobs:
+#      All: true
+#      Novice: false
+#    Gender: Female
+#    Locations:
+#      Armor: true
+#    Refineable: true
+#    EquipScript: |
+#      sc_start SC_WEDDING,INFINITE_TICK,0;
+#    UnEquipScript: |
+#      sc_end SC_WEDDING;
+#  - Id: 7170
+#    AegisName: Tuxedo
+#    Name: Tuxedo
+#    Type: Armor
+#    Buy: 43000
+#    Weight: 10
+#    Jobs:
+#      All: true
+#      Novice: false
+#    Gender: Male
+#    Locations:
+#      Armor: true
+#    ArmorLevel: 1
+#    Refineable: true
+#    EquipScript: |
+#      sc_start SC_WEDDING,INFINITE_TICK,0;
+#    UnEquipScript: |
+#      sc_end SC_WEDDING;
+
+# Non-kRO Eden Group Mark effect
+#=============================================================
+#  - Id: 22508
+#    AegisName: Para_Team_Mark_
+#    Name: Eden Group Mark
+#    Type: Delayconsume
+#    Script: |
+#      unitskilluseid getcharid(3),"AL_TELEPORT",3;
+
+# Gender restrictions that were removed on official servers
+#=============================================================
+#  - Id: 2206
+#    Gender: Female
+#  - Id: 2208
+#    Gender: Female
+#  - Id: 2209
+#    Gender: Female
+#  - Id: 2234
+#    Gender: Female
+#  - Id: 2235
+#    Gender: Male
+#  - Id: 2407
+#    Gender: Female
+#  - Id: 2415
+#    Gender: Female
+#  - Id: 2494
+#    Gender: Female
+#  - Id: 5143
+#    Gender: Male
+#  - Id: 5164
+#    Gender: Female
+#  - Id: 5165
+#    Gender: Male
+#  - Id: 5191
+#    Gender: Female
+#  - Id: 5192
+#    Gender: Female
+#  - Id: 5193
+#    Gender: Female
+#  - Id: 5194
+#    Gender: Female
+#  - Id: 5195
+#    Gender: Female
+#  - Id: 5196
+#    Gender: Female
+#  - Id: 5197
+#    Gender: Female
+#  - Id: 5221
+#    Gender: Female
+#  - Id: 5354
+#    Gender: Male
+#  - Id: 5355
+#    Gender: Female
+#  - Id: 5400
+#    Gender: Female
+#  - Id: 5681
+#    Gender: Female
+#  - Id: 5735
+#    Gender: Female
+
+Body:
+
+
+
+
+
+
+
+
+# ---- SRH equipment BEGIN ----
+  - Id: 210001
+    AegisName: pg_Crude_Assaulter_Armor
+    Name: Crude Assaulter Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bShortAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bShortAtkRate,5;
+      }
+  - Id: 210002
+    AegisName: pg_Crude_Sharpshooter_Suit
+    Name: Crude Sharpshooter Suit
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bLongAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bLongAtkRate,5;
+      }
+  - Id: 210003
+    AegisName: pg_Crude_Arcanist_Robe
+    Name: Crude Arcanist Robe
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,15;
+      bonus2 bMagicAddRace,RC_All,5;
+      bonus bMatk,1*.@r;
+      bonus2 bIgnoreMdefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,15;
+      	bonus2 bMagicAddRace,RC_All,5;
+      }
+  - Id: 210004
+    AegisName: pg_Crude_Bulwark_Armor
+    Name: Crude Bulwark Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAspd,-1;
+      bonus bDef,20;
+      bonus bMdef,5;
+      bonus2 bSubRace,RC_Player_Human,5;
+      bonus2 bSubRace,RC_Player_Doram,5;
+      bonus bAtkRate,-5;
+      bonus bMatkRate,-5;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bNearAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,20;
+      	bonus bMdef,5;
+      	bonus2 bSubSize,SZ_MEDIUM,3;
+      }
+  - Id: 210005
+    AegisName: pg_Crude_Guardian_Mail
+    Name: Crude Guardian Mail
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,5;
+      bonus bHealPower,5;
+      bonus bMaxHP,80*.@r;
+      bonus bAddItemHealRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,5;
+      	bonus bHealPower,5;
+      }
+  - Id: 210006
+    AegisName: pg_Crude_Spellweaver_Suit
+    Name: Crude Spellweaver Suit
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus bDelayrate,-10;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bFixedCastrate,-(7*(min(.@r,10)));
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus bDelayrate,-10;
+      }
+  - Id: 210007
+    AegisName: pg_Crude_Saboteur_Robe
+    Name: Crude Saboteur Robe
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus2 bResEff,Eff_Bleeding,4000;
+      bonus3 bAddEff,Eff_Bleeding,(1*.@r)*100,ATF_TARGET|ATF_SHORT|ATF_LONG;
+      bonus3 bAddEffWhenHit,Eff_Freeze,(2*(min(.@r,10)/2))*100,ATF_SHORT|ATF_LONG;
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus2 bResEff,Eff_Freeze,7000;
+      }
+  - Id: 210008
+    AegisName: pg_Crude_Ravager_Armor
+    Name: Crude Ravager Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,15;
+      bonus bCritAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,15;
+      	bonus bCritAtkRate,5;
+      }
+  - Id: 210009
+    AegisName: pg_Crude_Assaulter_Boots
+    Name: Crude Assaulter Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bShortAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bSpeedAddRate,5*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bShortAtkRate,5;
+      }
+  - Id: 210010
+    AegisName: pg_Crude_Sharpshooter_Boots
+    Name: Crude Sharpshooter Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bLongAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bSpeedAddRate,5*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bLongAtkRate,5;
+      }
+  - Id: 210011
+    AegisName: pg_Crude_Arcanist_Boots
+    Name: Crude Arcanist Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,5;
+      bonus2 bMagicAddRace,RC_All,5;
+      bonus bMatk,1*.@r;
+      bonus bMatkRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,5;
+      	bonus2 bMagicAddRace,RC_All,5;
+      }
+  - Id: 210012
+    AegisName: pg_Crude_Bulwark_Boots
+    Name: Crude Bulwark Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAspd,-1;
+      bonus bDef,10;
+      bonus bMdef,3;
+      bonus2 bSubRace,RC_Player_Human,3;
+      bonus2 bSubRace,RC_Player_Doram,3;
+      bonus bAtkRate,-5;
+      bonus bMatkRate,-5;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bMagicAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,10;
+      	bonus bMdef,3;
+      	bonus2 bSubSize,SZ_MEDIUM,3;
+      }
+  - Id: 210013
+    AegisName: pg_Crude_Guardian_Boots
+    Name: Crude Guardian Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,5;
+      bonus bHealPower,5;
+      bonus bMaxHP,80*.@r;
+      bonus bHealPower2,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,5;
+      	bonus bHealPower,5;
+      }
+  - Id: 210014
+    AegisName: pg_Crude_Spellweaver_Boots
+    Name: Crude Spellweaver Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus bDelayrate,-10;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bFixedCast,-200*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus bDelayrate,-10;
+      }
+  - Id: 210015
+    AegisName: pg_Crude_Saboteur_Boots
+    Name: Crude Saboteur Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus2 bResEff,Eff_Silence,4000;
+      bonus3 bAddEff,Eff_Silence,(1*.@r)*100,ATF_TARGET|ATF_SHORT|ATF_LONG;
+      bonus3 bAddEffWhenHit,Eff_Sleep,(2*(min(.@r,10)/2))*100,ATF_SHORT|ATF_LONG;
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus2 bResEff,Eff_Sleep,7000;
+      }
+  - Id: 210016
+    AegisName: pg_Crude_Ravager_Boots
+    Name: Crude Ravager Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,5;
+      bonus bCritAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bSpeedAddRate,5*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,5;
+      	bonus bCritAtkRate,5;
+      }
+  - Id: 210017
+    AegisName: pg_Crude_Assaulter_Manteau
+    Name: Crude Assaulter Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bShortAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus2 bAddRace,RC_Player_Human,1*(min(.@r,10)/2);
+      bonus2 bAddRace,RC_Player_Doram,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bShortAtkRate,5;
+      }
+  - Id: 210018
+    AegisName: pg_Crude_Sharpshooter_Manteau
+    Name: Crude Sharpshooter Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bLongAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus2 bAddRace,RC_Player_Human,1*(min(.@r,10)/2);
+      bonus2 bAddRace,RC_Player_Doram,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bLongAtkRate,5;
+      }
+  - Id: 210019
+    AegisName: pg_Crude_Arcanist_Manteau
+    Name: Crude Arcanist Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,5;
+      bonus2 bMagicAddRace,RC_All,5;
+      bonus bMatk,1*.@r;
+      bonus2 bMagicAddSize,SZ_MEDIUM,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,5;
+      	bonus2 bMagicAddRace,RC_All,5;
+      }
+  - Id: 210020
+    AegisName: pg_Crude_Bulwark_Manteau
+    Name: Crude Bulwark Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAspd,-1;
+      bonus bDef,10;
+      bonus bMdef,3;
+      bonus2 bSubRace,RC_Player_Human,3;
+      bonus2 bSubRace,RC_Player_Doram,3;
+      bonus bAtkRate,-5;
+      bonus bMatkRate,-5;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bLongAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,10;
+      	bonus bMdef,3;
+      	bonus2 bSubSize,SZ_SMALL,3;
+      }
+  - Id: 210021
+    AegisName: pg_Crude_Guardian_Manteau
+    Name: Crude Guardian Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,5;
+      bonus bHealPower,5;
+      bonus bMaxHP,80*.@r;
+      bonus2 bHPRegenRate,readparam(MaxHp)*(1*(min(.@r,10)/2))/100,5000;
+      bonus2 bSPRegenRate,readparam(MaxSp)*(1*(min(.@r,10)/2))/100,5000;
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,5;
+      	bonus bHealPower,5;
+      }
+  - Id: 210022
+    AegisName: pg_Crude_Spellweaver_Manteau
+    Name: Crude Spellweaver Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus bDelayrate,-10;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bAtkRate,1*(min(.@r,10)/2);
+      bonus bMatkRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus bDelayrate,-10;
+      }
+  - Id: 210023
+    AegisName: pg_Crude_Saboteur_Manteau
+    Name: Crude Saboteur Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus2 bResEff,Eff_Curse,4000;
+      bonus3 bAddEff,Eff_Curse,(1*.@r)*100,ATF_TARGET|ATF_MAGIC;
+      bonus3 bAddEffWhenHit,Eff_Stone,(2*(min(.@r,10)/2))*100,ATF_MAGIC;
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus2 bResEff,Eff_Stone,7000;
+      }
+  - Id: 210024
+    AegisName: pg_Crude_Ravager_Manteau
+    Name: Crude Ravager Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,5;
+      bonus bCritAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bAspdRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,5;
+      	bonus bCritAtkRate,5;
+      }
+  - Id: 210025
+    AegisName: pg_Crude_Assaulter_Helm
+    Name: Crude Assaulter Helm
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 2099
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bShortAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bAspd,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bShortAtkRate,5;
+      }
+  - Id: 210026
+    AegisName: pg_Crude_Sharpshooter_Beret
+    Name: Crude Sharpshooter Beret
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 731
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bLongAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bAspd,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bLongAtkRate,5;
+      }
+  - Id: 210027
+    AegisName: pg_Crude_Arcanist_Circlet
+    Name: Crude Arcanist Circlet
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1892
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,5;
+      bonus2 bMagicAddRace,RC_All,5;
+      bonus bMatk,1*.@r;
+      bonus bAspdRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAspd,1;
+      	bonus2 bMagicAddRace,RC_All,5;
+      }
+  - Id: 210028
+    AegisName: pg_Crude_Bulwark_Helm
+    Name: Crude Bulwark Helm
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1676
+    Script: |
+      .@r = getrefine();
+      bonus bAspd,-1;
+      bonus bDef,10;
+      bonus bMdef,3;
+      bonus2 bSubRace,RC_Player_Human,3;
+      bonus2 bSubRace,RC_Player_Doram,3;
+      bonus bAtkRate,-5;
+      bonus bMatkRate,-5;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bCritDefRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,10;
+      	bonus bMdef,3;
+      	bonus2 bSubSize,SZ_SMALL,3;
+      }
+  - Id: 210029
+    AegisName: pg_Crude_Guardian_Crown
+    Name: Crude Guardian Crown
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 746
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,5;
+      bonus bHealPower,5;
+      bonus bMaxHP,80*.@r;
+      bonus bMaxHP,1000*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,5;
+      	bonus bHealPower,5;
+      }
+  - Id: 210030
+    AegisName: pg_Crude_Spellweaver_Circlet
+    Name: Crude Spellweaver Circlet
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1680
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus bDelayrate,-10;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bUseSPrate,-(10*(min(.@r,10)/2));
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus bDelayrate,-10;
+      }
+  - Id: 210031
+    AegisName: pg_Crude_Saboteur_Hat
+    Name: Crude Saboteur Hat
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 372
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,5;
+      bonus bMatk,5;
+      bonus2 bResEff,Eff_Blind,4000;
+      bonus3 bAddEff,Eff_Blind,(1*.@r)*100,ATF_TARGET|ATF_MAGIC;
+      bonus3 bAddEffWhenHit,Eff_Stun,(2*(min(.@r,10)/2))*100,ATF_MAGIC;
+      if (.@r >= 10) {
+      	bonus bAtk,5;
+      	bonus bMatk,5;
+      	bonus2 bResEff,Eff_Stun,7000;
+      }
+  - Id: 210032
+    AegisName: pg_Crude_Ravager_Horns
+    Name: Crude Ravager Horns
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 757
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,5;
+      bonus bCritAtkRate,5;
+      bonus bAtk,1*.@r;
+      bonus bCriticalRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,5;
+      	bonus bCritAtkRate,5;
+      }
+  - Id: 210041
+    AegisName: pg_Mass_Assaulter_Armor
+    Name: Mass Assaulter Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,20;
+      bonus bShortAtkRate,7;
+      bonus bAtk,2*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,20;
+      	bonus bShortAtkRate,7;
+      }
+  - Id: 210042
+    AegisName: pg_Mass_Sharpshooter_Suit
+    Name: Mass Sharpshooter Suit
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,20;
+      bonus bLongAtkRate,7;
+      bonus bAtk,2*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,20;
+      	bonus bLongAtkRate,7;
+      }
+  - Id: 210043
+    AegisName: pg_Mass_Arcanist_Robe
+    Name: Mass Arcanist Robe
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,20;
+      bonus2 bMagicAddRace,RC_All,7;
+      bonus bMatk,2*.@r;
+      bonus2 bIgnoreMdefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,20;
+      	bonus2 bMagicAddRace,RC_All,7;
+      }
+  - Id: 210044
+    AegisName: pg_Mass_Bulwark_Armor
+    Name: Mass Bulwark Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bDef,25;
+      bonus bMdef,7;
+      bonus2 bSubRace,RC_Player_Human,7;
+      bonus2 bSubRace,RC_Player_Doram,7;
+      bonus bAtkRate,-4;
+      bonus bMatkRate,-4;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bNearAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,25;
+      	bonus bMdef,7;
+      	bonus2 bSubSize,SZ_MEDIUM,4;
+      }
+  - Id: 210045
+    AegisName: pg_Mass_Guardian_Robe
+    Name: Mass Guardian Robe
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,7;
+      bonus bHealPower,7;
+      bonus bMaxHP,120*.@r;
+      bonus bAddItemHealRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,7;
+      	bonus bHealPower,7;
+      }
+  - Id: 210046
+    AegisName: pg_Mass_Spellweaver_Suit
+    Name: Mass Spellweaver Suit
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus bDelayrate,-12;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bFixedCastrate,-(12*(min(.@r,10)/2));
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus bDelayrate,-12;
+      }
+  - Id: 210047
+    AegisName: pg_Mass_Saboteur_Armor
+    Name: Mass Saboteur Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus2 bResEff,Eff_Bleeding,6000;
+      bonus3 bAddEff,Eff_Bleeding,(1*.@r)*100,ATF_TARGET|ATF_SHORT|ATF_LONG;
+      bonus3 bAddEffWhenHit,Eff_Freeze,(2*(min(.@r,10)/2))*100,ATF_SHORT|ATF_LONG;
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus2 bResEff,Eff_Freeze,8500;
+      }
+  - Id: 210048
+    AegisName: pg_Mass_Ravager_Armor
+    Name: Mass Ravager Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,20;
+      bonus bCritAtkRate,7;
+      bonus bAtk,2*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,20;
+      	bonus bCritAtkRate,7;
+      }
+  - Id: 210049
+    AegisName: pg_Mass_Assaulter_Boots
+    Name: Mass Assaulter Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bShortAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bSpeedAddRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bShortAtkRate,6;
+      }
+  - Id: 210050
+    AegisName: pg_Mass_Sharpshooter_Boots
+    Name: Mass Sharpshooter Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bLongAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bSpeedAddRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bLongAtkRate,6;
+      }
+  - Id: 210051
+    AegisName: pg_Mass_Arcanist_Boots
+    Name: Mass Arcanist Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,10;
+      bonus2 bMagicAddRace,RC_All,6;
+      bonus bMatk,2*.@r;
+      bonus bMatkRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,10;
+      	bonus2 bMagicAddRace,RC_All,6;
+      }
+  - Id: 210052
+    AegisName: pg_Mass_Bulwark_Boots
+    Name: Mass Bulwark Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bDef,15;
+      bonus bMdef,5;
+      bonus2 bSubRace,RC_Player_Human,4;
+      bonus2 bSubRace,RC_Player_Doram,4;
+      bonus bAtkRate,-4;
+      bonus bMatkRate,-4;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bMagicAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,15;
+      	bonus bMdef,5;
+      	bonus2 bSubSize,SZ_MEDIUM,4;
+      }
+  - Id: 210053
+    AegisName: pg_Mass_Guardian_Boots
+    Name: Mass Guardian Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,6;
+      bonus bHealPower,6;
+      bonus bMaxHP,120*.@r;
+      bonus bHealPower2,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,6;
+      	bonus bHealPower,6;
+      }
+  - Id: 210054
+    AegisName: pg_Mass_Spellweaver_Boots
+    Name: Mass Spellweaver Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,7;
+      bonus bMatk,7;
+      bonus bDelayrate,-11;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bFixedCast,-200*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,7;
+      	bonus bMatk,7;
+      	bonus bDelayrate,-11;
+      }
+  - Id: 210055
+    AegisName: pg_Mass_Saboteur_Boots
+    Name: Mass Saboteur Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,7;
+      bonus bMatk,7;
+      bonus2 bResEff,Eff_Silence,6000;
+      bonus3 bAddEff,Eff_Silence,(1*.@r)*100,ATF_TARGET|ATF_SHORT|ATF_LONG;
+      bonus3 bAddEffWhenHit,Eff_Sleep,(2*(min(.@r,10)/2))*100,ATF_SHORT|ATF_LONG;
+      if (.@r >= 10) {
+      	bonus bAtk,7;
+      	bonus bMatk,7;
+      	bonus2 bResEff,Eff_Sleep,8500;
+      }
+  - Id: 210056
+    AegisName: pg_Mass_Ravager_Boots
+    Name: Mass Ravager Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,10;
+      bonus bCritAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bSpeedAddRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,10;
+      	bonus bCritAtkRate,6;
+      }
+  - Id: 210057
+    AegisName: pg_Mass_Assaulter_Manteau
+    Name: Mass Assaulter Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bShortAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus2 bAddRace,RC_Player_Human,1*(min(.@r,10)/2);
+      bonus2 bAddRace,RC_Player_Doram,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bShortAtkRate,6;
+      }
+  - Id: 210058
+    AegisName: pg_Mass_Sharpshooter_Manteau
+    Name: Mass Sharpshooter Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bLongAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus2 bAddRace,RC_Player_Human,1*(min(.@r,10)/2);
+      bonus2 bAddRace,RC_Player_Doram,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bLongAtkRate,6;
+      }
+  - Id: 210059
+    AegisName: pg_Mass_Arcanist_Manteau
+    Name: Mass Arcanist Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,10;
+      bonus2 bMagicAddRace,RC_All,6;
+      bonus bMatk,2*.@r;
+      bonus2 bMagicAddSize,SZ_MEDIUM,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,10;
+      	bonus2 bMagicAddRace,RC_All,6;
+      }
+  - Id: 210060
+    AegisName: pg_Mass_Bulwark_Manteau
+    Name: Mass Bulwark Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bDef,15;
+      bonus bMdef,5;
+      bonus2 bSubRace,RC_Player_Human,4;
+      bonus2 bSubRace,RC_Player_Doram,4;
+      bonus bAtkRate,-4;
+      bonus bMatkRate,-4;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bLongAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,15;
+      	bonus bMdef,5;
+      	bonus2 bSubSize,SZ_SMALL,4;
+      }
+  - Id: 210061
+    AegisName: pg_Mass_Guardian_Manteau
+    Name: Mass Guardian Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,6;
+      bonus bHealPower,6;
+      bonus bMaxHP,120*.@r;
+      bonus2 bHPRegenRate,readparam(MaxHp)*(1*(min(.@r,10)/2))/100,5000;
+      bonus2 bSPRegenRate,readparam(MaxSp)*(1*(min(.@r,10)/2))/100,5000;
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,6;
+      	bonus bHealPower,6;
+      }
+  - Id: 210062
+    AegisName: pg_Mass_Spellweaver_Manteau
+    Name: Mass Spellweaver Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,7;
+      bonus bMatk,7;
+      bonus bDelayrate,-11;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bAtkRate,1*(min(.@r,10)/2);
+      bonus bMatkRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,7;
+      	bonus bMatk,7;
+      	bonus bDelayrate,-11;
+      }
+  - Id: 210063
+    AegisName: pg_Mass_Saboteur_Manteau
+    Name: Mass Saboteur Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,7;
+      bonus bMatk,7;
+      bonus2 bResEff,Eff_Curse,6000;
+      bonus3 bAddEff,Eff_Curse,(1*.@r)*100,ATF_TARGET|ATF_MAGIC;
+      bonus3 bAddEffWhenHit,Eff_Stone,(2*(min(.@r,10)/2))*100,ATF_MAGIC;
+      if (.@r >= 10) {
+      	bonus bAtk,7;
+      	bonus bMatk,7;
+      	bonus2 bResEff,Eff_Stone,8500;
+      }
+  - Id: 210064
+    AegisName: pg_Mass_Ravager_Manteau
+    Name: Mass Ravager Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,10;
+      bonus bCritAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bAspdRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,10;
+      	bonus bCritAtkRate,6;
+      }
+  - Id: 210065
+    AegisName: pg_Mass_Assaulter_Helm
+    Name: Mass Assaulter Helm
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 2099
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bShortAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bAspd,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bShortAtkRate,6;
+      }
+  - Id: 210066
+    AegisName: pg_Mass_Sharpshooter_Headgear
+    Name: Mass Sharpshooter Headgear
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 731
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bLongAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bAspd,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bLongAtkRate,6;
+      }
+  - Id: 210067
+    AegisName: pg_Mass_Arcanist_Circlet
+    Name: Mass Arcanist Circlet
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1892
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,10;
+      bonus2 bMagicAddRace,RC_All,6;
+      bonus bMatk,2*.@r;
+      bonus bMaxSPrate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,10;
+      	bonus2 bMagicAddRace,RC_All,6;
+      }
+  - Id: 210068
+    AegisName: pg_Mass_Bulwark_Helm
+    Name: Mass Bulwark Helm
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1676
+    Script: |
+      .@r = getrefine();
+      bonus bDef,15;
+      bonus bMdef,5;
+      bonus2 bSubRace,RC_Player_Human,4;
+      bonus2 bSubRace,RC_Player_Doram,4;
+      bonus bAtkRate,-4;
+      bonus bMatkRate,-4;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bCritDefRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,15;
+      	bonus bMdef,5;
+      	bonus2 bSubSize,SZ_SMALL,4;
+      }
+  - Id: 210069
+    AegisName: pg_Mass_Guardian_Crown
+    Name: Mass Guardian Crown
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 746
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,5;
+      bonus bHealPower,5;
+      bonus bMaxHP,80*.@r;
+      bonus bMaxHP,1000*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,5;
+      	bonus bHealPower,5;
+      }
+  - Id: 210070
+    AegisName: pg_Mass_Spellweaver_Circlet
+    Name: Mass Spellweaver Circlet
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1680
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,7;
+      bonus bMatk,7;
+      bonus bDelayrate,-11;
+      bonus bVariableCastrate,-(1*.@r);
+      bonus bUseSPrate,-(10*(min(.@r,10)/2));
+      if (.@r >= 10) {
+      	bonus bAtk,7;
+      	bonus bMatk,7;
+      	bonus bDelayrate,-11;
+      }
+  - Id: 210071
+    AegisName: pg_Mass_Saboteur_Hat
+    Name: Mass Saboteur Hat
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 372
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,7;
+      bonus bMatk,7;
+      bonus2 bResEff,Eff_Blind,6000;
+      bonus3 bAddEff,Eff_Blind,(1*.@r)*100,ATF_TARGET|ATF_MAGIC;
+      bonus3 bAddEffWhenHit,Eff_Stun,(2*(min(.@r,10)/2))*100,ATF_MAGIC;
+      if (.@r >= 10) {
+      	bonus bAtk,7;
+      	bonus bMatk,7;
+      	bonus2 bResEff,Eff_Stun,8500;
+      }
+  - Id: 210072
+    AegisName: pg_Mass_Ravager_Horns
+    Name: Mass Ravager Horns
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 757
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,10;
+      bonus bCritAtkRate,6;
+      bonus bAtk,2*.@r;
+      bonus bCriticalRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,10;
+      	bonus bCritAtkRate,6;
+      }
+  - Id: 210081
+    AegisName: pg_Prime_Assaulter_Armor
+    Name: Prime Assaulter Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,25;
+      bonus bShortAtkRate,10;
+      bonus bAtk,3*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,25;
+      	bonus bShortAtkRate,10;
+      }
+  - Id: 210082
+    AegisName: pg_Prime_Sharpshooter_Suit
+    Name: Prime Sharpshooter Suit
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,25;
+      bonus bLongAtkRate,10;
+      bonus bAtk,3*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,25;
+      	bonus bLongAtkRate,10;
+      }
+  - Id: 210083
+    AegisName: pg_Prime_Arcanist_Robe
+    Name: Prime Arcanist Robe
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,25;
+      bonus2 bMagicAddRace,RC_All,10;
+      bonus bMatk,3*.@r;
+      bonus2 bIgnoreMdefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,25;
+      	bonus2 bMagicAddRace,RC_All,10;
+      }
+  - Id: 210084
+    AegisName: pg_Prime_Bulwark_Armor
+    Name: Prime Bulwark Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bDef,30;
+      bonus bMdef,10;
+      bonus2 bSubRace,RC_Player_Human,10;
+      bonus2 bSubRace,RC_Player_Doram,10;
+      bonus bAtkRate,-3;
+      bonus bMatkRate,-3;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bNearAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,30;
+      	bonus bMdef,10;
+      	bonus2 bSubSize,SZ_MEDIUM,5;
+      }
+  - Id: 210085
+    AegisName: pg_Prime_Guardian_Robe
+    Name: Prime Guardian Robe
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,10;
+      bonus bHealPower,10;
+      bonus bMaxHP,160*.@r;
+      bonus bAddItemHealRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,10;
+      	bonus bHealPower,10;
+      }
+  - Id: 210086
+    AegisName: pg_Prime_Spellweaver_Suit
+    Name: Prime Spellweaver Suit
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bMatk,15;
+      bonus bDelayrate,-15;
+      bonus bVariableCastrate,-(2*.@r);
+      bonus bFixedCastrate,-(12*(min(.@r,10)/2));
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bMatk,15;
+      	bonus bDelayrate,-15;
+      }
+  - Id: 210087
+    AegisName: pg_Prime_Saboteur_Armor
+    Name: Prime Saboteur Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bMatk,15;
+      bonus2 bResEff,Eff_Bleeding,8000;
+      bonus3 bAddEff,Eff_Bleeding,(1*.@r)*100,ATF_TARGET|ATF_SHORT|ATF_LONG;
+      bonus3 bAddEffWhenHit,Eff_Freeze,(2*(min(.@r,10)/2))*100,ATF_SHORT|ATF_LONG;
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bMatk,15;
+      	bonus2 bResEff,Eff_Freeze,10000;
+      }
+  - Id: 210088
+    AegisName: pg_Prime_Ravager_Armor
+    Name: Prime Ravager Armor
+    Type: Armor
+    Weight: 0
+    Defense: 80
+    Locations:
+      Armor: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,25;
+      bonus bCritAtkRate,10;
+      bonus bAtk,3*.@r;
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,25;
+      	bonus bCritAtkRate,10;
+      }
+  - Id: 210089
+    AegisName: pg_Prime_Assaulter_Boots
+    Name: Prime Assaulter Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bShortAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bSpeedAddRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bShortAtkRate,7;
+      }
+  - Id: 210090
+    AegisName: pg_Prime_Sharpshooter_Boots
+    Name: Prime Sharpshooter Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bLongAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bSpeedAddRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bLongAtkRate,7;
+      }
+  - Id: 210091
+    AegisName: pg_Prime_Arcanist_Boots
+    Name: Prime Arcanist Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,15;
+      bonus2 bMagicAddRace,RC_All,7;
+      bonus bMatk,3*.@r;
+      bonus bMatkRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,15;
+      	bonus2 bMagicAddRace,RC_All,7;
+      }
+  - Id: 210092
+    AegisName: pg_Prime_Bulwark_Boots
+    Name: Prime Bulwark Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bDef,20;
+      bonus bMdef,7;
+      bonus2 bSubRace,RC_Player_Human,5;
+      bonus2 bSubRace,RC_Player_Doram,5;
+      bonus bAtkRate,-3;
+      bonus bMatkRate,-3;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bMagicAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,20;
+      	bonus bMdef,7;
+      	bonus2 bSubSize,SZ_MEDIUM,5;
+      }
+  - Id: 210093
+    AegisName: pg_Prime_Guardian_Boots
+    Name: Prime Guardian Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,7;
+      bonus bHealPower,7;
+      bonus bMaxHP,160*.@r;
+      bonus bHealPower2,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,7;
+      	bonus bHealPower,7;
+      }
+  - Id: 210094
+    AegisName: pg_Prime_Spellweaver_Boots
+    Name: Prime Spellweaver Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus bDelayrate,-12;
+      bonus bVariableCastrate,-(2*.@r);
+      bonus bFixedCast,-200*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus bDelayrate,-12;
+      }
+  - Id: 210095
+    AegisName: pg_Prime_Saboteur_Boots
+    Name: Prime Saboteur Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus2 bResEff,Eff_Silence,8000;
+      bonus3 bAddEff,Eff_Silence,(1*.@r)*100,ATF_TARGET|ATF_SHORT|ATF_LONG;
+      bonus3 bAddEffWhenHit,Eff_Sleep,(2*(min(.@r,10)/2))*100,ATF_SHORT|ATF_LONG;
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus2 bResEff,Eff_Sleep,10000;
+      }
+  - Id: 210096
+    AegisName: pg_Prime_Ravager_Boots
+    Name: Prime Ravager Boots
+    Type: Armor
+    Weight: 0
+    Defense: 30
+    Locations:
+      Shoes: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,15;
+      bonus bCritAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bSpeedAddRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,15;
+      	bonus bCritAtkRate,7;
+      }
+  - Id: 210097
+    AegisName: pg_Prime_Assaulter_Manteau
+    Name: Prime Assaulter Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bShortAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus2 bAddRace,RC_Player_Human,1*(min(.@r,10)/2);
+      bonus2 bAddRace,RC_Player_Doram,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bShortAtkRate,7;
+      }
+  - Id: 210098
+    AegisName: pg_Prime_Sharpshooter_Manteau
+    Name: Prime Sharpshooter Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bLongAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus2 bAddRace,RC_Player_Human,1*(min(.@r,10)/2);
+      bonus2 bAddRace,RC_Player_Doram,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bLongAtkRate,7;
+      }
+  - Id: 210099
+    AegisName: pg_Prime_Arcanist_Manteau
+    Name: Prime Arcanist Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,15;
+      bonus2 bMagicAddRace,RC_All,7;
+      bonus bMatk,3*.@r;
+      bonus2 bMagicAddSize,SZ_MEDIUM,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,15;
+      	bonus2 bMagicAddRace,RC_All,7;
+      }
+  - Id: 210100
+    AegisName: pg_Prime_Bulwark_Manteau
+    Name: Prime Bulwark Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bDef,20;
+      bonus bMdef,7;
+      bonus2 bSubRace,RC_Player_Human,5;
+      bonus2 bSubRace,RC_Player_Doram,5;
+      bonus bAtkRate,-3;
+      bonus bMatkRate,-3;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bLongAtkDef,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,20;
+      	bonus bMdef,7;
+      	bonus2 bSubSize,SZ_SMALL,5;
+      }
+  - Id: 210101
+    AegisName: pg_Prime_Guardian_Manteau
+    Name: Prime Guardian Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,7;
+      bonus bHealPower,7;
+      bonus bMaxHP,160*.@r;
+      bonus2 bHPRegenRate,readparam(MaxHp)*(1*(min(.@r,10)/2))/100,5000;
+      bonus2 bSPRegenRate,readparam(MaxSp)*(1*(min(.@r,10)/2))/100,5000;
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,7;
+      	bonus bHealPower,7;
+      }
+  - Id: 210102
+    AegisName: pg_Prime_Spellweaver_Manteau
+    Name: Prime Spellweaver Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus bDelayrate,-12;
+      bonus bVariableCastrate,-(2*.@r);
+      bonus bAtkRate,1*(min(.@r,10)/2);
+      bonus bMatkRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus bDelayrate,-12;
+      }
+  - Id: 210103
+    AegisName: pg_Prime_Saboteur_Manteau
+    Name: Prime Saboteur Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus2 bResEff,Eff_Curse,8000;
+      bonus3 bAddEff,Eff_Curse,(1*.@r)*100,ATF_TARGET|ATF_MAGIC;
+      bonus3 bAddEffWhenHit,Eff_Stone,(2*(min(.@r,10)/2))*100,ATF_MAGIC;
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus2 bResEff,Eff_Stone,10000;
+      }
+  - Id: 210104
+    AegisName: pg_Prime_Ravager_Manteau
+    Name: Prime Ravager Manteau
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Garment: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,15;
+      bonus bCritAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bAspdRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,15;
+      	bonus bCritAtkRate,7;
+      }
+  - Id: 210105
+    AegisName: pg_Prime_Assaulter_Helm
+    Name: Prime Assaulter Helm
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 2099
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bShortAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bAspd,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bShortAtkRate,7;
+      }
+  - Id: 210106
+    AegisName: pg_Prime_Sharpshooter_Headgear
+    Name: Prime Sharpshooter Headgear
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 731
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,15;
+      bonus bLongAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bAspd,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bAtk,15;
+      	bonus bLongAtkRate,7;
+      }
+  - Id: 210107
+    AegisName: pg_Prime_Arcanist_Circlet
+    Name: Prime Arcanist Circlet
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1892
+    Script: |
+      .@r = getrefine();
+      bonus bMatk,15;
+      bonus2 bMagicAddRace,RC_All,7;
+      bonus bMatk,3*.@r;
+      bonus bMaxSPrate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMatk,15;
+      	bonus2 bMagicAddRace,RC_All,7;
+      }
+  - Id: 210108
+    AegisName: pg_Prime_Bulwark_Helm
+    Name: Prime Bulwark Helm
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1676
+    Script: |
+      .@r = getrefine();
+      bonus bDef,20;
+      bonus bMdef,7;
+      bonus2 bSubRace,RC_Player_Human,5;
+      bonus2 bSubRace,RC_Player_Doram,5;
+      bonus bAtkRate,-3;
+      bonus bMatkRate,-3;
+      bonus bRes,1*.@r;
+      bonus bMRes,1*.@r;
+      bonus bCritDefRate,1*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bDef,20;
+      	bonus bMdef,7;
+      	bonus2 bSubSize,SZ_SMALL,5;
+      }
+  - Id: 210109
+    AegisName: pg_Prime_Guardian_Crown
+    Name: Prime Guardian Crown
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 746
+    Script: |
+      .@r = getrefine();
+      bonus bMaxHPrate,7;
+      bonus bHealPower,7;
+      bonus bMaxHP,160*.@r;
+      bonus bMaxHP,1000*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bMaxHPrate,7;
+      	bonus bHealPower,7;
+      }
+  - Id: 210110
+    AegisName: pg_Prime_Spellweaver_Circlet
+    Name: Prime Spellweaver Circlet
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 1680
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus bDelayrate,-12;
+      bonus bVariableCastrate,-(2*.@r);
+      bonus bUseSPrate,-(10*(min(.@r,10)/2));
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus bDelayrate,-12;
+      }
+  - Id: 210111
+    AegisName: pg_Prime_Saboteur_Hat
+    Name: Prime Saboteur Hat
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 372
+    Script: |
+      .@r = getrefine();
+      bonus bAtk,10;
+      bonus bMatk,10;
+      bonus2 bResEff,Eff_Blind,8000;
+      bonus3 bAddEff,Eff_Blind,(1*.@r)*100,ATF_TARGET|ATF_MAGIC;
+      bonus3 bAddEffWhenHit,Eff_Stun,(2*(min(.@r,10)/2))*100,ATF_MAGIC;
+      if (.@r >= 10) {
+      	bonus bAtk,10;
+      	bonus bMatk,10;
+      	bonus2 bResEff,Eff_Stun,10000;
+      }
+  - Id: 210112
+    AegisName: pg_Prime_Ravager_Horns
+    Name: Prime Ravager Horns
+    Type: Armor
+    Weight: 0
+    Defense: 50
+    Locations:
+      Head_Top: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 757
+    Script: |
+      .@r = getrefine();
+      bonus bCritical,15;
+      bonus bCritAtkRate,7;
+      bonus bAtk,3*.@r;
+      bonus bCriticalRate,2*(min(.@r,10)/2);
+      if (.@r >= 10) {
+      	bonus bCritical,15;
+      	bonus bCritAtkRate,7;
+      }
+  - Id: 210113
+    AegisName: pg_Siege_Cranial_Shield
+    Name: Siege Cranial Shield
+    Type: Armor
+    Weight: 2500
+    Locations:
+      Left_Hand: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 4
+    Script: |
+      .@r = getrefine();
+      bonus2 bSubRace,RC_Player_Human,35;
+      bonus bRes,2*.@r;
+      bonus bMRes,2*.@r;
+  - Id: 210114
+    AegisName: pg_Siege_Brutal_Shield
+    Name: Siege Brutal Shield
+    Type: Armor
+    Weight: 2500
+    Locations:
+      Left_Hand: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 2
+    Script: |
+      .@r = getrefine();
+      bonus2 bSubRace,RC_Player_Doram,35;
+      bonus bRes,2*.@r;
+      bonus bMRes,2*.@r;
+  - Id: 210115
+    AegisName: pg_Siege_Attack_Buckler
+    Name: Siege Attack Buckler
+    Type: Armor
+    Weight: 0
+    Locations:
+      Left_Hand: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 2
+    Script: |
+      bonus bAtkRate,2;
+      .@r = getrefine();
+      bonus bAtkRate,.@r/2;
+      if (.@r >= 12)
+      	autobonus "{ bonus bAtkRate,15; bonus bDefRate,-50; }",300,10000,BF_WEAPON;
+  - Id: 210116
+    AegisName: pg_Siege_Magical_Buckler
+    Name: Siege Magical Buckler
+    Type: Armor
+    Weight: 0
+    Locations:
+      Left_Hand: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 2
+    Script: |
+      bonus bMatkRate,2;
+      .@r = getrefine();
+      bonus bMatkRate,.@r/2;
+      if (.@r >= 12)
+      	autobonus "{ bonus bMatkRate,15; bonus bMdefRate,-50; }",300,10000,BF_MAGIC;
+  - Id: 210117
+    AegisName: pg_Siege_Reflective_Shield
+    Name: Siege Reflective Shield
+    Type: Armor
+    Weight: 0
+    Locations:
+      Left_Hand: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    View: 4
+    Script: |
+      .@r = getrefine();
+      bonus bMagicDamageReturn,10;
+      bonus bShortWeaponDamageReturn,10;
+      bonus bLongWeaponDamageReturn,10;
+      bonus bMagicDamageReturn,2*.@r;
+      bonus bShortWeaponDamageReturn,1*.@r;
+      bonus bLongWeaponDamageReturn,1*.@r;
+  - Id: 210118
+    AegisName: pg_Siege_Reload_Glasses
+    Name: Siege Reload Glasses
+    Type: Armor
+    Weight: 0
+    Locations:
+      Head_Mid: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      bonus bDelayrate,-6;
+  - Id: 210119
+    AegisName: pg_Siege_Reload_Mask
+    Name: Siege Reload Mask
+    Type: Armor
+    Weight: 0
+    Locations:
+      Head_Low: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      bonus bDelayrate,-6;
+  - Id: 210120
+    AegisName: pg_Siege_Casting_Glasses
+    Name: Siege Casting Glasses
+    Type: Armor
+    Weight: 0
+    Locations:
+      Head_Mid: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      bonus bFixedCast,-150;
+  - Id: 210121
+    AegisName: pg_Siege_Casting_Mask
+    Name: Siege Casting Mask
+    Type: Armor
+    Weight: 0
+    Locations:
+      Head_Low: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      bonus bFixedCast,-150;
+  - Id: 210122
+    AegisName: pg_Siege_Resist_Glasses
+    Name: Siege Resist Glasses
+    Type: Armor
+    Weight: 0
+    Locations:
+      Head_Mid: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      bonus bNearAtkDef,5;
+      bonus bLongAtkDef,5;
+  - Id: 210123
+    AegisName: pg_Siege_Resist_Mask
+    Name: Siege Resist Mask
+    Type: Armor
+    Weight: 0
+    Locations:
+      Head_Low: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      bonus bMagicAtkDef,5;
+  - Id: 210130
+    AegisName: pg_Siege_Attack_Ring
+    Name: Siege Attack Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bAtkRate,1;
+      bonus2 bIgnoreDefRaceRate,RC_All,1;
+      bonus bAtkRate,.@s/9;
+      bonus2 bIgnoreDefRaceRate,RC_All,.@s/9;
+  - Id: 210131
+    AegisName: pg_Siege_Magical_Ring
+    Name: Siege Magical Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bMatkRate,1;
+      bonus2 bIgnoreMdefRaceRate,RC_All,1;
+      bonus bMatkRate,.@s/9;
+      bonus2 bIgnoreMdefRaceRate,RC_All,.@s/9;
+  - Id: 210132
+    AegisName: pg_Siege_Defensive_Ring
+    Name: Siege Defensive Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bNearAtkDef,.@s/3;
+  - Id: 210133
+    AegisName: pg_Siege_Anti_Magic_Ring
+    Name: Siege Anti Magic Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bMagicAtkDef,.@s/3;
+  - Id: 210134
+    AegisName: pg_Siege_Anti_Sniping_Ring
+    Name: Siege Anti Sniping Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bLongAtkDef,.@s/3;
+  - Id: 210135
+    AegisName: pg_Siege_Casting_Ring
+    Name: Siege Casting Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bVariableCastrate,-(.@s/3);
+  - Id: 210136
+    AegisName: pg_Siege_Reload_Ring
+    Name: Siege Reload Ring
+    Type: Armor
+    Weight: 0
+    Locations:
+      Both_Accessory: true
+    ArmorLevel: 1
+    EquipLevelMin: 200
+    Script: |
+      .@s = getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_SHOES) + getequiprefinerycnt(EQI_HEAD_TOP);
+      bonus bDelayrate,-(.@s/6);
+# ---- SRH equipment END ----
+# ---- SRH weapons BEGIN ----
+  - Id: 210241
+    AegisName: pg_Dull_Blade
+    Name: Dull Blade
+    Type: Weapon
+    SubType: 1hSword
+    Weight: 1200
+    Attack: 50
+    MagicAttack: 40
+    Range: 1
+    Jobs:
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bMaxHP,350*min(.@r,10);
+      bonus bNearAtkDef,2*(.@x);
+      bonus bMagicAtkDef,2*(.@x);
+      bonus bMaxHPrate,1*(.@x);
+  - Id: 210242
+    AegisName: pg_Dull_Longsword
+    Name: Dull Longsword
+    Type: Weapon
+    SubType: 2hSword
+    Weight: 2000
+    Attack: 200
+    Range: 1
+    Jobs:
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bCritAtkRate,2*(.@x);
+  - Id: 210243
+    AegisName: pg_Dull_Spear
+    Name: Dull Spear
+    Type: Weapon
+    SubType: 1hSpear
+    Weight: 2000
+    Attack: 150
+    Range: 3
+    Jobs:
+      Knight: true
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+  - Id: 210244
+    AegisName: pg_Dull_Lance
+    Name: Dull Lance
+    Type: Weapon
+    SubType: 2hSpear
+    Weight: 3000
+    Attack: 220
+    Range: 3
+    Jobs:
+      Knight: true
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(.@x);
+  - Id: 210245
+    AegisName: pg_Dull_Axe
+    Name: Dull Axe
+    Type: Weapon
+    SubType: 1hAxe
+    Weight: 1700
+    Attack: 160
+    Range: 1
+    Jobs:
+      Alchemist: true
+      Blacksmith: true
+      Knight: true
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      skill "NC_PILEBUNKER",1;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bMaxHPrate,2*(.@x);
+  - Id: 210246
+    AegisName: pg_Dull_Great_Axe
+    Name: Dull Great Axe
+    Type: Weapon
+    SubType: 2hAxe
+    Weight: 3000
+    Attack: 230
+    Range: 1
+    Jobs:
+      Blacksmith: true
+      Knight: true
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      skill "NC_PILEBUNKER",1;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bAspdRate,2*(.@x);
+  - Id: 210247
+    AegisName: pg_Dull_Wand
+    Name: Dull Wand
+    Type: Weapon
+    SubType: Staff
+    Weight: 500
+    Attack: 50
+    MagicAttack: 40
+    Range: 1
+    Jobs:
+      Wizard: true
+      SoulLinker: true
+      Priest: true
+      SuperNovice: true
+      Sage: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus bHealPower,3*(.@x);
+      if (.@r >= 10) {
+          bonus bAspd,1;
+      }
+  - Id: 210248
+    AegisName: pg_Dull_Staff
+    Name: Dull Staff
+    Type: Weapon
+    SubType: 2hStaff
+    Weight: 1000
+    Attack: 50
+    MagicAttack: 80
+    Range: 1
+    Jobs:
+      Wizard: true
+      Sage: true
+      SoulLinker: true
+      SuperNovice: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,20;
+      bonus2 bSubRace,RC_Player_Doram,20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      if (.@r >= 10) {
+          bonus bAspd,2;
+      }
+  - Id: 210249
+    AegisName: pg_Dull_Dagger
+    Name: Dull Dagger
+    Type: Weapon
+    SubType: Dagger
+    Weight: 800
+    Attack: 80
+    MagicAttack: 40
+    Range: 1
+    Jobs:
+      Hunter: true
+      Rogue: true
+      Assassin: true
+      KagerouOboro: true
+      SuperNovice: true
+      Crusader: true
+      Knight: true
+      SoulLinker: true
+      Wizard: true
+      Sage: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+  - Id: 210250
+    AegisName: pg_Dull_Katar
+    Name: Dull Katar
+    Type: Weapon
+    SubType: Katar
+    Weight: 1200
+    Attack: 150
+    Range: 1
+    Jobs:
+      Assassin: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bCritical,10;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bCritAtkRate,3*(.@x);
+      bonus bAspdRate,3*(.@x);
+      if (.@r >= 10) {
+          bonus bCritical,20;
+      }
+  - Id: 210251
+    AegisName: pg_Dull_Claw
+    Name: Dull Claw
+    Type: Weapon
+    SubType: Knuckle
+    Weight: 1000
+    Attack: 130
+    Range: 1
+    Jobs:
+      Monk: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+  - Id: 210252
+    AegisName: pg_Dull_Book
+    Name: Dull Book
+    Type: Weapon
+    SubType: Book
+    Weight: 800
+    Attack: 130
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Sage: true
+      StarGladiator: true
+      Priest: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      if (.@r >= 10) {
+          bonus bAspd,5;
+      }
+  - Id: 210253
+    AegisName: pg_Dull_Morning_Star
+    Name: Dull Morning Star
+    Type: Weapon
+    SubType: Mace
+    Weight: 1800
+    Attack: 80
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Priest: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+  - Id: 210254
+    AegisName: pg_Dull_Bow
+    Name: Dull Bow
+    Type: Weapon
+    SubType: Bow
+    Weight: 1400
+    Attack: 150
+    Range: 5
+    Jobs:
+      Hunter: true
+      Rogue: true
+      BardDancer: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,20;
+      bonus2 bSubRace,RC_Player_Doram,20;
+      bonus2 bSkillAtk,RA_WUGSTRIKE,-50;
+      bonus2 bSkillAtk,WH_HAWKRUSH,-50;
+      bonus bCritical,15;
+      bonus bAspd,2;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bAspd,2;
+      bonus bCritAtkRate,3*(.@x);
+      bonus bAspdRate,2*(.@x);
+      bonus bLongAtkRate,3*(.@x);
+      if (.@r >= 10) {
+          bonus bCritical,25;
+      }
+  - Id: 210255
+    AegisName: pg_Dull_Violin
+    Name: Dull Violin
+    Type: Weapon
+    SubType: Musical
+    Weight: 1000
+    Attack: 130
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      BardDancer: true
+    Gender: Male
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+  - Id: 210256
+    AegisName: pg_Dull_Thorn_Whip
+    Name: Dull Thorn Whip
+    Type: Weapon
+    SubType: Whip
+    Weight: 600
+    Attack: 130
+    MagicAttack: 50
+    Range: 2
+    Jobs:
+      BardDancer: true
+    Gender: Female
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+  - Id: 210257
+    AegisName: pg_Dull_Huuma_Shuriken
+    Name: Dull Huuma Shuriken
+    Type: Weapon
+    SubType: Huuma
+    Weight: 1700
+    Attack: 140
+    Range: 1
+    Jobs:
+      KagerouOboro: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bCritical,10;
+      bonus bLongAtkRate,2*(.@x);
+      bonus bShortAtkRate,2*(.@x);
+      if (.@r >= 10) {
+          bonus bCritical,5;
+          skill "OB_ZANGETSU",1;
+      }
+  - Id: 210258
+    AegisName: pg_Dull_Handgun
+    Name: Dull Handgun
+    Type: Weapon
+    SubType: Revolver
+    Weight: 600
+    Attack: 120
+    Range: 7
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bAspdRate,10;
+      bonus bCritical,10;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bAspdRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      if (.@r >= 10) {
+          bonus bAspdRate,10;
+          bonus bCritical,10;
+      }
+  - Id: 210259
+    AegisName: pg_Dull_Rifle
+    Name: Dull Rifle
+    Type: Weapon
+    SubType: Rifle
+    Weight: 1700
+    Attack: 150
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      if (.@r >= 10) {
+          bonus2 bSkillCooldown,RL_HAMMER_OF_GOD,-10000;
+      }
+  - Id: 210260
+    AegisName: pg_Dull_Shotgun
+    Name: Dull Shotgun
+    Type: Weapon
+    SubType: Shotgun
+    Weight: 1400
+    Attack: 180
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bVariableCastrate,-10;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      if (.@r >= 10) {
+          bonus bVariableCastrate,-20;
+      }
+  - Id: 210261
+    AegisName: pg_Dull_Gatling_Gun
+    Name: Dull Gatling Gun
+    Type: Weapon
+    SubType: Gatling
+    Weight: 1900
+    Attack: 130
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bAspd,2;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bAspdRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      if (.@r >= 10) {
+          bonus bAspd,2;
+      }
+  - Id: 210262
+    AegisName: pg_Dull_Grenade_Gun
+    Name: Dull Grenade Gun
+    Type: Weapon
+    SubType: Grenade
+    Weight: 3000
+    Attack: 300
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus2 bSubRace,RC_Player_Human,30;
+      bonus2 bSubRace,RC_Player_Doram,30;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,5*(.@x);
+  - Id: 210263
+    AegisName: pg_Dull_Foxtail
+    Name: Dull Foxtail
+    Type: Weapon
+    SubType: Staff
+    Weight: 300
+    Attack: 80
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Spirit_Handler: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+  - Id: 210264
+    AegisName: pg_Radiant_Blade
+    Name: Radiant Blade
+    Type: Weapon
+    SubType: 1hSword
+    Weight: 1200
+    Attack: 50
+    MagicAttack: 80
+    Range: 1
+    Jobs:
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bNearAtkDef,2*(.@x);
+      bonus bMagicAtkDef,2*(.@x);
+      bonus bMaxHPrate,1*(.@ap);
+  - Id: 210265
+    AegisName: pg_Radiant_Longsword
+    Name: Radiant Longsword
+    Type: Weapon
+    SubType: 2hSword
+    Weight: 2000
+    Attack: 200
+    Range: 1
+    Jobs:
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bCritAtkRate,2*(.@x);
+      bonus bAspdRate,1*(.@ap);
+      bonus bCritical,2*(.@ap);
+  - Id: 210266
+    AegisName: pg_Radiant_Spear
+    Name: Radiant Spear
+    Type: Weapon
+    SubType: 1hSpear
+    Weight: 2000
+    Attack: 150
+    Range: 3
+    Jobs:
+      Knight: true
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+  - Id: 210267
+    AegisName: pg_Radiant_Lance
+    Name: Radiant Lance
+    Type: Weapon
+    SubType: 2hSpear
+    Weight: 3000
+    Attack: 220
+    Range: 3
+    Jobs:
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210268
+    AegisName: pg_Radiant_Axe
+    Name: Radiant Axe
+    Type: Weapon
+    SubType: 1hAxe
+    Weight: 1700
+    Attack: 160
+    Range: 1
+    Jobs:
+      Alchemist: true
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bMaxHPrate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210269
+    AegisName: pg_Radiant_Great_Axe
+    Name: Radiant Great Axe
+    Type: Weapon
+    SubType: 2hAxe
+    Weight: 3000
+    Attack: 230
+    Range: 1
+    Jobs:
+      Blacksmith: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bAspdRate,2*(.@x);
+      bonus bSpeedAddRate,1*(.@ap);
+      bonus bAspdRate,1*(.@ap);
+  - Id: 210270
+    AegisName: pg_Radiant_Wand
+    Name: Radiant Wand
+    Type: Weapon
+    SubType: Staff
+    Weight: 500
+    Attack: 50
+    MagicAttack: 80
+    Range: 1
+    Jobs:
+      Wizard: true
+      Sage: true
+      Priest: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus bHealPower,3*(.@x);
+      bonus bVariableCastrate,0-(1*(.@ap));
+      bonus bHealPower,1*(.@ap);
+  - Id: 210271
+    AegisName: pg_Radiant_Staff
+    Name: Radiant Staff
+    Type: Weapon
+    SubType: 2hStaff
+    Weight: 1000
+    Attack: 50
+    MagicAttack: 100
+    Range: 1
+    Jobs:
+      Wizard: true
+      Sage: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bVariableCastrate,0-(1*(.@ap));
+      bonus bDelayrate,0-(1*(.@ap));
+  - Id: 210272
+    AegisName: pg_Radiant_Dagger
+    Name: Radiant Dagger
+    Type: Weapon
+    SubType: Dagger
+    Weight: 800
+    Attack: 80
+    MagicAttack: 40
+    Range: 1
+    Jobs:
+      Rogue: true
+      Assassin: true
+      KagerouOboro: true
+      SuperNovice: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bVariableCastrate,0-(1*(.@ap));
+      bonus bDelayrate,0-(1*(.@ap));
+  - Id: 210273
+    AegisName: pg_Radiant_Katar
+    Name: Radiant Katar
+    Type: Weapon
+    SubType: Katar
+    Weight: 1200
+    Attack: 150
+    Range: 1
+    Jobs:
+      Assassin: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bCritAtkRate,2*(.@x);
+      bonus bAspdRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+  - Id: 210274
+    AegisName: pg_Radiant_Claw
+    Name: Radiant Claw
+    Type: Weapon
+    SubType: Knuckle
+    Weight: 1000
+    Attack: 130
+    Range: 1
+    Jobs:
+      Monk: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bAspdRate,1*(.@ap);
+  - Id: 210275
+    AegisName: pg_Radiant_Book
+    Name: Radiant Book
+    Type: Weapon
+    SubType: Book
+    Weight: 800
+    Attack: 130
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Sage: true
+      StarGladiator: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bAspdRate,1*(.@ap);
+      bonus bDelayrate,0-(1*(.@ap));
+  - Id: 210276
+    AegisName: pg_Radiant_Morning_Star
+    Name: Radiant Morning Star
+    Type: Weapon
+    SubType: Mace
+    Weight: 1800
+    Attack: 80
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Priest: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bVariableCastrate,0-(1*(.@ap));
+  - Id: 210277
+    AegisName: pg_Radiant_Bow
+    Name: Radiant Bow
+    Type: Weapon
+    SubType: Bow
+    Weight: 1400
+    Attack: 150
+    Range: 5
+    Jobs:
+      Hunter: true
+      Rogue: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bCritAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210278
+    AegisName: pg_Radiant_Violin
+    Name: Radiant Violin
+    Type: Weapon
+    SubType: Musical
+    Weight: 1000
+    Attack: 130
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      BardDancer: true
+    Gender: Male
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210279
+    AegisName: pg_Radiant_Blade_Whip
+    Name: Radiant Blade Whip
+    Type: Weapon
+    SubType: Whip
+    Weight: 600
+    Attack: 130
+    MagicAttack: 50
+    Range: 2
+    Jobs:
+      BardDancer: true
+    Gender: Female
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210280
+    AegisName: pg_Radiant_Huuma_Shuriken
+    Name: Radiant Huuma Shuriken
+    Type: Weapon
+    SubType: Huuma
+    Weight: 1700
+    Attack: 140
+    Range: 1
+    Jobs:
+      KagerouOboro: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210281
+    AegisName: pg_Radiant_Handgun
+    Name: Radiant Handgun
+    Type: Weapon
+    SubType: Revolver
+    Weight: 600
+    Attack: 120
+    Range: 7
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bAspdRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210282
+    AegisName: pg_Radiant_Rifle
+    Name: Radiant Rifle
+    Type: Weapon
+    SubType: Rifle
+    Weight: 1700
+    Attack: 150
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210283
+    AegisName: pg_Radiant_Shotgun
+    Name: Radiant Shotgun
+    Type: Weapon
+    SubType: Shotgun
+    Weight: 1400
+    Attack: 180
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210284
+    AegisName: pg_Radiant_Gatling_Gun
+    Name: Radiant Gatling Gun
+    Type: Weapon
+    SubType: Gatling
+    Weight: 1900
+    Attack: 130
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bAspdRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210285
+    AegisName: pg_Radiant_Grenade_Gun
+    Name: Radiant Grenade Gun
+    Type: Weapon
+    SubType: Grenade
+    Weight: 3000
+    Attack: 250
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210286
+    AegisName: pg_Radiant_Foxtail
+    Name: Radiant Foxtail
+    Type: Weapon
+    SubType: Staff
+    Weight: 300
+    Attack: 80
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Spirit_Handler: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+      bonus bFixedCast,-50*(.@ap);
+  - Id: 210287
+    AegisName: pg_Stygian_Blade
+    Name: Stygian Blade
+    Type: Weapon
+    SubType: 1hSword
+    Weight: 1200
+    Attack: 50
+    MagicAttack: 80
+    Range: 1
+    Jobs:
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bNearAtkDef,2*(.@x);
+      bonus bMagicAtkDef,2*(.@x);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210288
+    AegisName: pg_Stygian_Longsword
+    Name: Stygian Longsword
+    Type: Weapon
+    SubType: 2hSword
+    Weight: 2000
+    Attack: 200
+    Range: 1
+    Jobs:
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bCritAtkRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210289
+    AegisName: pg_Stygian_Spear
+    Name: Stygian Spear
+    Type: Weapon
+    SubType: 1hSpear
+    Weight: 2000
+    Attack: 150
+    Range: 3
+    Jobs:
+      Knight: true
+      Crusader: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210290
+    AegisName: pg_Stygian_Lance
+    Name: Stygian Lance
+    Type: Weapon
+    SubType: 2hSpear
+    Weight: 3000
+    Attack: 220
+    Range: 3
+    Jobs:
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bIgnoreDefRaceRate,RC_All,1*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210291
+    AegisName: pg_Stygian_Axe
+    Name: Stygian Axe
+    Type: Weapon
+    SubType: 1hAxe
+    Weight: 1700
+    Attack: 160
+    Range: 1
+    Jobs:
+      Alchemist: true
+      Blacksmith: true
+      Knight: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bMaxHPrate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210292
+    AegisName: pg_Stygian_Great_Axe
+    Name: Stygian Great Axe
+    Type: Weapon
+    SubType: 2hAxe
+    Weight: 3000
+    Attack: 230
+    Range: 1
+    Jobs:
+      Blacksmith: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bAspdRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210293
+    AegisName: pg_Stygian_Wand
+    Name: Stygian Wand
+    Type: Weapon
+    SubType: Staff
+    Weight: 500
+    Attack: 50
+    MagicAttack: 80
+    Range: 1
+    Jobs:
+      Wizard: true
+      Sage: true
+      Priest: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus bHealPower,3*(.@x);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210294
+    AegisName: pg_Stygian_Staff
+    Name: Stygian Staff
+    Type: Weapon
+    SubType: 2hStaff
+    Weight: 1000
+    Attack: 50
+    MagicAttack: 100
+    Range: 1
+    Jobs:
+      Wizard: true
+      Sage: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210295
+    AegisName: pg_Stygian_Dagger
+    Name: Stygian Dagger
+    Type: Weapon
+    SubType: Dagger
+    Weight: 800
+    Attack: 80
+    MagicAttack: 40
+    Range: 1
+    Jobs:
+      Rogue: true
+      Assassin: true
+      KagerouOboro: true
+      SuperNovice: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210296
+    AegisName: pg_Stygian_Katar
+    Name: Stygian Katar
+    Type: Weapon
+    SubType: Katar
+    Weight: 1200
+    Attack: 150
+    Range: 1
+    Jobs:
+      Assassin: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bCritAtkRate,2*(.@x);
+      bonus bAspdRate,2*(.@x);
+      bonus bDelayrate,0-(1*(.@ap));
+  - Id: 210297
+    AegisName: pg_Stygian_Claw
+    Name: Stygian Claw
+    Type: Weapon
+    SubType: Knuckle
+    Weight: 1000
+    Attack: 130
+    Range: 1
+    Jobs:
+      Monk: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210298
+    AegisName: pg_Stygian_Book
+    Name: Stygian Book
+    Type: Weapon
+    SubType: Book
+    Weight: 800
+    Attack: 130
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Sage: true
+      StarGladiator: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210299
+    AegisName: pg_Stygian_Morning_Star
+    Name: Stygian Morning Star
+    Type: Weapon
+    SubType: Mace
+    Weight: 1800
+    Attack: 80
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Priest: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210300
+    AegisName: pg_Stygian_Bow
+    Name: Stygian Bow
+    Type: Weapon
+    SubType: Bow
+    Weight: 1400
+    Attack: 150
+    Range: 5
+    Jobs:
+      Hunter: true
+      Rogue: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bCritAtkRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210301
+    AegisName: pg_Stygian_Violin
+    Name: Stygian Violin
+    Type: Weapon
+    SubType: Musical
+    Weight: 1000
+    Attack: 130
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      BardDancer: true
+    Gender: Male
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210302
+    AegisName: pg_Stygian_Blade_Whip
+    Name: Stygian Blade Whip
+    Type: Weapon
+    SubType: Whip
+    Weight: 600
+    Attack: 130
+    MagicAttack: 50
+    Range: 2
+    Jobs:
+      BardDancer: true
+    Gender: Female
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus2 bMagicAddEle,Ele_All,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210303
+    AegisName: pg_Stygian_Huuma_Shuriken
+    Name: Stygian Huuma Shuriken
+    Type: Weapon
+    SubType: Huuma
+    Weight: 1700
+    Attack: 140
+    Range: 1
+    Jobs:
+      KagerouOboro: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210304
+    AegisName: pg_Stygian_Handgun
+    Name: Stygian Handgun
+    Type: Weapon
+    SubType: Revolver
+    Weight: 600
+    Attack: 120
+    Range: 7
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bAspdRate,2*(.@x);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210305
+    AegisName: pg_Stygian_Rifle
+    Name: Stygian Rifle
+    Type: Weapon
+    SubType: Rifle
+    Weight: 1700
+    Attack: 150
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210306
+    AegisName: pg_Stygian_Shotgun
+    Name: Stygian Shotgun
+    Type: Weapon
+    SubType: Shotgun
+    Weight: 1400
+    Attack: 180
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210307
+    AegisName: pg_Stygian_Gatling_Gun
+    Name: Stygian Gatling Gun
+    Type: Weapon
+    SubType: Gatling
+    Weight: 1900
+    Attack: 130
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,2*(.@x);
+      bonus bAspdRate,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210308
+    AegisName: pg_Stygian_Grenade_Launcher
+    Name: Stygian Grenade Launcher
+    Type: Weapon
+    SubType: Grenade
+    Weight: 3000
+    Attack: 250
+    Range: 9
+    Jobs:
+      Rebellion: true
+    Classes:
+      Fourth: true
+    Locations:
+      Both_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bLongAtkRate,3*(.@x);
+      bonus bAtkRate,1*(.@ap);
+  - Id: 210309
+    AegisName: pg_Stygian_Foxtail
+    Name: Stygian Foxtail
+    Type: Weapon
+    SubType: Staff
+    Weight: 300
+    Attack: 80
+    MagicAttack: 50
+    Range: 1
+    Jobs:
+      Spirit_Handler: true
+    Classes:
+      Fourth: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 4
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      .@ap = readparam(Ap) / 20;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bMatk,min(.@r,10)*min(.@r,10);
+      bonus2 bAddSize,Size_All,2*(.@x);
+      bonus2 bMagicAddSize,Size_All,2*(.@x);
+      bonus bAtkRate,1*(.@ap);
+      bonus bMatkRate,1*(.@ap);
+  - Id: 210310
+    AegisName: pg_Dull_Short_Sword
+    Name: Dull Short Sword
+    Type: Weapon
+    SubType: 1hSword
+    Weight: 1200
+    Attack: 120
+    Range: 1
+    Jobs:
+      Knight: true
+      Crusader: true
+      Assassin: true
+      Rogue: true
+      SuperNovice: true
+      Blacksmith: true
+      Alchemist: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bMaxHPrate,2*(.@x);
+      bonus bAspdRate,1*(.@x);
+  - Id: 210311
+    AegisName: pg_Dull_Pocket_Knife
+    Name: Dull Pocket Knife
+    Type: Weapon
+    SubType: Dagger
+    Weight: 1200
+    Attack: 110
+    Range: 1
+    Jobs:
+      Knight: true
+      Crusader: true
+      Rogue: true
+      Assassin: true
+      KagerouOboro: true
+      SuperNovice: true
+      Hunter: true
+      SoulLinker: true
+      Sage: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bMaxHPrate,2*(.@x);
+      bonus2 bAddSize,Size_All,1*(.@x);
+  - Id: 210312
+    AegisName: pg_Dull_Mace
+    Name: Dull Mace
+    Type: Weapon
+    SubType: Mace
+    Weight: 1800
+    Attack: 160
+    Range: 1
+    Jobs:
+      Blacksmith: true
+      Alchemist: true
+      Priest: true
+      Monk: true
+      Crusader: true
+      Knight: true
+      SuperNovice: true
+    Locations:
+      Right_Hand: true
+    WeaponLevel: 3
+    EquipLevelMin: 200
+    Refineable: true
+    Script: |
+      .@r = getrefine();
+      .@x = getrefine() - 10;
+      if (.@x < 0) .@x = 0;
+      bonus bAtk,min(.@r,10)*min(.@r,10);
+      bonus bShortAtkRate,2*(.@x);
+      bonus bMaxHPrate,2*(.@x);
+# ---- SRH weapons END ----
+# ---- SRH supply nosell BEGIN ----
+  - Id: 100516
+    Weight: 40
+  - Id: 100517
+    Weight: 40
+  - Id: 100518
+    Weight: 40
+  - Id: 100519
+    Weight: 40
+  - Id: 100520
+    Weight: 40
+  - Id: 100521
+    Weight: 40
+  - Id: 100522
+    Weight: 40
+  - Id: 100523
+    Weight: 40
+# ---- SRH supply nosell END ----
+# ---- SRH consumables BEGIN ----
+  - Id: 220723
+    AegisName: pg_Red_Tonic
+    Name: Red Tonic
+    Type: Healing
+    Weight: 60
+    Delay:
+      Duration: 200
+    Script: |
+      percentheal rand(6,8),0;
+  - Id: 220724
+    AegisName: pg_Blue_Tonic
+    Name: Blue Tonic
+    Type: Healing
+    Weight: 60
+    Delay:
+      Duration: 200
+    Script: |
+      itemheal 0,100;
+  - Id: 220725
+    AegisName: pg_Red_Tonic_Box_80
+    Name: Red Tonic Box (80)
+    Type: Usable
+    Weight: 500
+    Script: |
+      setarray .@i,220723;
+      setarray .@q,80;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220725,1,Bound_Account;
+        end;
+      }
+      getitembound 220723,80,Bound_Account;
+  - Id: 220726
+    AegisName: pg_Blue_Tonic_Box_80
+    Name: Blue Tonic Box (80)
+    Type: Usable
+    Weight: 500
+    Script: |
+      setarray .@i,220724;
+      setarray .@q,80;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220726,1,Bound_Account;
+        end;
+      }
+      getitembound 220724,80,Bound_Account;
+  - Id: 220727
+    AegisName: pg_Red_Blue_Tonic_Box_80
+    Name: Red & Blue Tonic Box (80)
+    Type: Usable
+    Weight: 500
+    Script: |
+      setarray .@i,220723,220724;
+      setarray .@q,40,40;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220727,1,Bound_Account;
+        end;
+      }
+      getitembound 220723,40,Bound_Account;
+      getitembound 220724,40,Bound_Account;
+  - Id: 220728
+    AegisName: pg_Red_Tonic_Box_50
+    Name: Red Tonic Box (50)
+    Type: Usable
+    Weight: 2700
+    Script: |
+      setarray .@i,220723;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220728,1,Bound_Account;
+        end;
+      }
+      getitembound 220723,50,Bound_Account;
+  - Id: 220729
+    AegisName: pg_Blue_Tonic_Box_50
+    Name: Blue Tonic Box (50)
+    Type: Usable
+    Weight: 2700
+    Script: |
+      setarray .@i,220724;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220729,1,Bound_Account;
+        end;
+      }
+      getitembound 220724,50,Bound_Account;
+  - Id: 220737
+    AegisName: pg_Flame_Acid_Box_25
+    Name: Flame Acid Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000276;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220737,1,Bound_Account;
+        end;
+      }
+      getitembound 1000276,25,Bound_Account;
+  - Id: 220738
+    AegisName: pg_Earth_Acid_Box_25
+    Name: Earth Acid Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000277;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220738,1,Bound_Account;
+        end;
+      }
+      getitembound 1000277,25,Bound_Account;
+  - Id: 220739
+    AegisName: pg_Gale_Acid_Box_25
+    Name: Gale Acid Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000278;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220739,1,Bound_Account;
+        end;
+      }
+      getitembound 1000278,25,Bound_Account;
+  - Id: 220740
+    AegisName: pg_Icicle_Acid_Box_25
+    Name: Icicle Acid Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000279;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220740,1,Bound_Account;
+        end;
+      }
+      getitembound 1000279,25,Bound_Account;
+  - Id: 220741
+    AegisName: pg_Advanced_Coating_Box_25
+    Name: Advanced Coating Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000280;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220741,1,Bound_Account;
+        end;
+      }
+      getitembound 1000280,25,Bound_Account;
+  - Id: 220742
+    AegisName: pg_Greater_Plant_Box_25
+    Name: Greater Plant Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000281;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220742,1,Bound_Account;
+        end;
+      }
+      getitembound 1000281,25,Bound_Account;
+  - Id: 220625
+    AegisName: pg_Nosiege_Box_10
+    Name: Nosiege Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12725;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220625,1,Bound_Account;
+        end;
+      }
+      getitembound 12725,10,Bound_Account;
+  - Id: 220626
+    AegisName: pg_Rhydo_Box_10
+    Name: Rhydo Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12726;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220626,1,Bound_Account;
+        end;
+      }
+      getitembound 12726,10,Bound_Account;
+  - Id: 220627
+    AegisName: pg_Verkana_Box_10
+    Name: Verkana Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12727;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220627,1,Bound_Account;
+        end;
+      }
+      getitembound 12727,10,Bound_Account;
+  - Id: 220628
+    AegisName: pg_Isia_Box_10
+    Name: Isia Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12728;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220628,1,Bound_Account;
+        end;
+      }
+      getitembound 12728,10,Bound_Account;
+  - Id: 220629
+    AegisName: pg_Asir_Box_10
+    Name: Asir Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12729;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220629,1,Bound_Account;
+        end;
+      }
+      getitembound 12729,10,Bound_Account;
+  - Id: 220630
+    AegisName: pg_Urj_Box_10
+    Name: Urj Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12730;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220630,1,Bound_Account;
+        end;
+      }
+      getitembound 12730,10,Bound_Account;
+  - Id: 220631
+    AegisName: pg_Turisus_Box_10
+    Name: Turisus Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12731;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220631,1,Bound_Account;
+        end;
+      }
+      getitembound 12731,10,Bound_Account;
+  - Id: 220632
+    AegisName: pg_Pertz_Box_10
+    Name: Pertz Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12732;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220632,1,Bound_Account;
+        end;
+      }
+      getitembound 12732,10,Bound_Account;
+  - Id: 220633
+    AegisName: pg_Hagalaz_Box_10
+    Name: Hagalaz Box(10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12733;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220633,1,Bound_Account;
+        end;
+      }
+      getitembound 12733,10,Bound_Account;
+  - Id: 220634
+    AegisName: pg_LuxAnima_Box_5
+    Name: LuxAnima Box(5)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,22540;
+      setarray .@q,5;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220634,1,Bound_Account;
+        end;
+      }
+      getitembound 22540,5,Bound_Account;
+  - Id: 220635
+    AegisName: pg_Mado_Fuel_Box_100
+    Name: Mado Fuel Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6146;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220635,1,Bound_Account;
+        end;
+      }
+      getitembound 6146,100,Bound_Account;
+  - Id: 220636
+    AegisName: pg_Vulcan_Bullet_Box_100
+    Name: Vulcan Bullet Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6145;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220636,1,Bound_Account;
+        end;
+      }
+      getitembound 6145,100,Bound_Account;
+  - Id: 220637
+    AegisName: pg_Liquid_Bullet_Box_100
+    Name: Liquid Bullet Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6147;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220637,1,Bound_Account;
+        end;
+      }
+      getitembound 6147,100,Bound_Account;
+  - Id: 220638
+    AegisName: pg_Repair_A_Box_20
+    Name: Repair A Box (20)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12392;
+      setarray .@q,20;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220638,1,Bound_Account;
+        end;
+      }
+      getitembound 12392,20,Bound_Account;
+  - Id: 220639
+    AegisName: pg_Repair_B_Box_20
+    Name: Repair B Box (20)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12393;
+      setarray .@q,20;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220639,1,Bound_Account;
+        end;
+      }
+      getitembound 12393,20,Bound_Account;
+  - Id: 220640
+    AegisName: pg_Repair_C_Box_20
+    Name: Repair C Box (20)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12394;
+      setarray .@q,20;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220640,1,Bound_Account;
+        end;
+      }
+      getitembound 12394,20,Bound_Account;
+  - Id: 220641
+    AegisName: pg_Scarlet_Point_Box_10
+    Name: Scarlet Point Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6360;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220641,1,Bound_Account;
+        end;
+      }
+      getitembound 6360,10,Bound_Account;
+  - Id: 220642
+    AegisName: pg_Indigo_Point_Box_10
+    Name: Indigo Point Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6361;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220642,1,Bound_Account;
+        end;
+      }
+      getitembound 6361,10,Bound_Account;
+  - Id: 220643
+    AegisName: pg_Yellow_Wish_Point_Box_10
+    Name: Yellow Wish Point Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6362;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220643,1,Bound_Account;
+        end;
+      }
+      getitembound 6362,10,Bound_Account;
+  - Id: 220644
+    AegisName: pg_Lime_Green_Point_Box_10
+    Name: Lime Green Point Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6363;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220644,1,Bound_Account;
+        end;
+      }
+      getitembound 6363,10,Bound_Account;
+  - Id: 220645
+    AegisName: pg_Machine_Capsule_Box_10
+    Name: Machine Capsule Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000289;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220645,1,Bound_Account;
+        end;
+      }
+      getitembound 1000289,10,Bound_Account;
+  - Id: 220646
+    AegisName: pg_ABR_Capsule_Box_10
+    Name: ABR Capsule Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000290;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220646,1,Bound_Account;
+        end;
+      }
+      getitembound 1000290,10,Bound_Account;
+  - Id: 220647
+    AegisName: pg_Blue_Gemstone_Box_50
+    Name: Blue Gemstone Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,717;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220647,1,Bound_Account;
+        end;
+      }
+      getitembound 717,50,Bound_Account;
+  - Id: 220648
+    AegisName: pg_Yellow_Gemstone_Box_50
+    Name: Yellow Gemstone Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,715;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220648,1,Bound_Account;
+        end;
+      }
+      getitembound 715,50,Bound_Account;
+  - Id: 220649
+    AegisName: pg_Red_Gemstone_Box_50
+    Name: Red Gemstone Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,716;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220649,1,Bound_Account;
+        end;
+      }
+      getitembound 716,50,Bound_Account;
+  - Id: 220650
+    AegisName: pg_Red_Blood_Box_15
+    Name: Red Blood Box (15)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,990;
+      setarray .@q,15;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220650,1,Bound_Account;
+        end;
+      }
+      getitembound 990,15,Bound_Account;
+  - Id: 220651
+    AegisName: pg_Crystal_Blue_Box_15
+    Name: Crystal Blue Box (15)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,991;
+      setarray .@q,15;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220651,1,Bound_Account;
+        end;
+      }
+      getitembound 991,15,Bound_Account;
+  - Id: 220652
+    AegisName: pg_Wind_of_Verdure_Box_15
+    Name: Wind of Verdure Box (15)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,992;
+      setarray .@q,15;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220652,1,Bound_Account;
+        end;
+      }
+      getitembound 992,15,Bound_Account;
+  - Id: 220653
+    AegisName: pg_Green_Live_Box_15
+    Name: Green Live Box (15)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,993;
+      setarray .@q,15;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220653,1,Bound_Account;
+        end;
+      }
+      getitembound 993,15,Bound_Account;
+  - Id: 220654
+    AegisName: pg_Poison_Bottle_Box_20
+    Name: Poison Bottle Box (20)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,678;
+      setarray .@q,20;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220654,1,Bound_Account;
+        end;
+      }
+      getitembound 678,20,Bound_Account;
+  - Id: 220655
+    AegisName: pg_Paralysis_Bottle_Box_10
+    Name: Paralysis Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12717;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220655,1,Bound_Account;
+        end;
+      }
+      getitembound 12717,10,Bound_Account;
+  - Id: 220656
+    AegisName: pg_Leech_Bottle_Box_10
+    Name: Leech Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12718;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220656,1,Bound_Account;
+        end;
+      }
+      getitembound 12718,10,Bound_Account;
+  - Id: 220657
+    AegisName: pg_Oblivion_Bottle_Box_10
+    Name: Oblivion Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12719;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220657,1,Bound_Account;
+        end;
+      }
+      getitembound 12719,10,Bound_Account;
+  - Id: 220658
+    AegisName: pg_Death_Bottle_Box_10
+    Name: Death Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12720;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220658,1,Bound_Account;
+        end;
+      }
+      getitembound 12720,10,Bound_Account;
+  - Id: 220659
+    AegisName: pg_Toxin_Bottle_Box_10
+    Name: Toxin Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12721;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220659,1,Bound_Account;
+        end;
+      }
+      getitembound 12721,10,Bound_Account;
+  - Id: 220660
+    AegisName: pg_Pyrexia_Bottle_Box_10
+    Name: Pyrexia Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12722;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220660,1,Bound_Account;
+        end;
+      }
+      getitembound 12722,10,Bound_Account;
+  - Id: 220661
+    AegisName: pg_Mushroom_Bottle_Box_10
+    Name: Mushroom Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12723;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220661,1,Bound_Account;
+        end;
+      }
+      getitembound 12723,10,Bound_Account;
+  - Id: 220662
+    AegisName: pg_Bleed_Bottle_Box_10
+    Name: Bleed Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12724;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220662,1,Bound_Account;
+        end;
+      }
+      getitembound 12724,10,Bound_Account;
+  - Id: 220663
+    AegisName: pg_Antidote_Bottle_Box_10
+    Name: Antidote Bottle Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6128;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220663,1,Bound_Account;
+        end;
+      }
+      getitembound 6128,10,Bound_Account;
+  - Id: 220664
+    AegisName: pg_Face_Paint_Box_30
+    Name: Face Paint Box (30)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6120;
+      setarray .@q,30;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220664,1,Bound_Account;
+        end;
+      }
+      getitembound 6120,30,Bound_Account;
+  - Id: 220665
+    AegisName: pg_Surface_Paint_Box_20
+    Name: Surface Paint Box (20)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6123;
+      setarray .@q,20;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220665,1,Bound_Account;
+        end;
+      }
+      getitembound 6123,20,Bound_Account;
+  - Id: 220666
+    AegisName: pg_Ancilla_Box_3
+    Name: Ancilla Box (3)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,12333;
+      setarray .@q,3;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220666,1,Bound_Account;
+        end;
+      }
+      getitembound 12333,3,Bound_Account;
+  - Id: 220667
+    AegisName: pg_Holy_Water_Box_10
+    Name: Holy Water Box (10)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,523;
+      setarray .@q,10;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220667,1,Bound_Account;
+        end;
+      }
+      getitembound 523,10,Bound_Account;
+  - Id: 220668
+    AegisName: pg_Fire_Bottle_Box_25
+    Name: Fire Bottle Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7135;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220668,1,Bound_Account;
+        end;
+      }
+      getitembound 7135,25,Bound_Account;
+  - Id: 220669
+    AegisName: pg_Acid_Bottle_Box_25
+    Name: Acid Bottle Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7136;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220669,1,Bound_Account;
+        end;
+      }
+      getitembound 7136,25,Bound_Account;
+  - Id: 220670
+    AegisName: pg_Glistening_Coat_Box_25
+    Name: Glistening Coat Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7139;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220670,1,Bound_Account;
+        end;
+      }
+      getitembound 7139,25,Bound_Account;
+  - Id: 220671
+    AegisName: pg_Plant_Bottle_Box_25
+    Name: Plant Bottle Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7137;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220671,1,Bound_Account;
+        end;
+      }
+      getitembound 7137,25,Bound_Account;
+  - Id: 220672
+    AegisName: pg_Marine_Bottle_Box_25
+    Name: Marine Bottle Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7138;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220672,1,Bound_Account;
+        end;
+      }
+      getitembound 7138,25,Bound_Account;
+  - Id: 220673
+    AegisName: pg_Thorny_Seed_Box_25
+    Name: Thorny Seed Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6210;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220673,1,Bound_Account;
+        end;
+      }
+      getitembound 6210,25,Bound_Account;
+  - Id: 220674
+    AegisName: pg_Suck_Seed_Box_25
+    Name: Suck Seed Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6211;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220674,1,Bound_Account;
+        end;
+      }
+      getitembound 6211,25,Bound_Account;
+  - Id: 220675
+    AegisName: pg_Bomb_Mushroom_Box_25
+    Name: Bomb Mushroom Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6212;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220675,1,Bound_Account;
+        end;
+      }
+      getitembound 6212,25,Bound_Account;
+  - Id: 220676
+    AegisName: pg_Explosive_Powder_Box_25
+    Name: Explosive Powder Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6213;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220676,1,Bound_Account;
+        end;
+      }
+      getitembound 6213,25,Bound_Account;
+  - Id: 220677
+    AegisName: pg_Smoke_Powder_Box_25
+    Name: Smoke Powder Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6214;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220677,1,Bound_Account;
+        end;
+      }
+      getitembound 6214,25,Bound_Account;
+  - Id: 220678
+    AegisName: pg_Tear_Gas_Box_25
+    Name: Tear Gas Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6215;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220678,1,Bound_Account;
+        end;
+      }
+      getitembound 6215,25,Bound_Account;
+  - Id: 220679
+    AegisName: pg_Oil_Bottle_Box_25
+    Name: Oil Bottle Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6216;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220679,1,Bound_Account;
+        end;
+      }
+      getitembound 6216,25,Bound_Account;
+  - Id: 220680
+    AegisName: pg_Mandragora_Box_25
+    Name: Mandragora Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6217;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220680,1,Bound_Account;
+        end;
+      }
+      getitembound 6217,25,Bound_Account;
+  - Id: 220681
+    AegisName: pg_Alcohol_Box_25
+    Name: Alcohol Box (25)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,970;
+      setarray .@q,25;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220681,1,Bound_Account;
+        end;
+      }
+      getitembound 970,25,Bound_Account;
+  - Id: 220682
+    AegisName: pg_Catnip_Fruit_Box_30
+    Name: Catnip Fruit Box (30)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,11602;
+      setarray .@q,30;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220682,1,Bound_Account;
+        end;
+      }
+      getitembound 11602,30,Bound_Account;
+  - Id: 220683
+    AegisName: pg_Shrimp_Box_30
+    Name: Shrimp Box (30)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,567;
+      setarray .@q,30;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220683,1,Bound_Account;
+        end;
+      }
+      getitembound 567,30,Bound_Account;
+  - Id: 220684
+    AegisName: pg_Soul_Talisman_Box_50
+    Name: Soul Talisman Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000563;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220684,1,Bound_Account;
+        end;
+      }
+      getitembound 1000563,50,Bound_Account;
+  - Id: 220685
+    AegisName: pg_Metal_Jacket_Box_100
+    Name: Metal Jacket Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7663;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220685,1,Bound_Account;
+        end;
+      }
+      getitembound 7663,100,Bound_Account;
+  - Id: 220686
+    AegisName: pg_Shooting_Mine_Box_100
+    Name: Shooting Mine Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7664;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220686,1,Bound_Account;
+        end;
+      }
+      getitembound 7664,100,Bound_Account;
+  - Id: 220687
+    AegisName: pg_Dragon_Tail_Box_100
+    Name: Dragon Tail Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7665;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220687,1,Bound_Account;
+        end;
+      }
+      getitembound 7665,100,Bound_Account;
+  - Id: 220688
+    AegisName: pg_Slug_Bullet_Box_50
+    Name: Slug Bullet Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,25187;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220688,1,Bound_Account;
+        end;
+      }
+      getitembound 25187,50,Bound_Account;
+  - Id: 220689
+    AegisName: pg_Throwing_Grenade_Box_300
+    Name: Throwing Grenade Box (300)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000564;
+      setarray .@q,300;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220689,1,Bound_Account;
+        end;
+      }
+      getitembound 1000564,300,Bound_Account;
+  - Id: 220690
+    AegisName: pg_Flame_Stone_Box_150
+    Name: Flame Stone Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7521;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220690,1,Bound_Account;
+        end;
+      }
+      getitembound 7521,150,Bound_Account;
+  - Id: 220691
+    AegisName: pg_Ice_Stone_Box_150
+    Name: Ice Stone Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7522;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220691,1,Bound_Account;
+        end;
+      }
+      getitembound 7522,150,Bound_Account;
+  - Id: 220692
+    AegisName: pg_Wind_Stone_Box_150
+    Name: Wind Stone Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7523;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220692,1,Bound_Account;
+        end;
+      }
+      getitembound 7523,150,Bound_Account;
+  - Id: 220693
+    AegisName: pg_Shadow_Stone_Box_150
+    Name: Shadow Stone Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,7524;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220693,1,Bound_Account;
+        end;
+      }
+      getitembound 7524,150,Bound_Account;
+  - Id: 220694
+    AegisName: pg_Fire_Charm_Box_150
+    Name: Fire Charm Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6512;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220694,1,Bound_Account;
+        end;
+      }
+      getitembound 6512,150,Bound_Account;
+  - Id: 220695
+    AegisName: pg_Ice_Charm_Box_150
+    Name: Ice Charm Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6513;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220695,1,Bound_Account;
+        end;
+      }
+      getitembound 6513,150,Bound_Account;
+  - Id: 220696
+    AegisName: pg_Wind_Charm_Box_150
+    Name: Wind Charm Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6514;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220696,1,Bound_Account;
+        end;
+      }
+      getitembound 6514,150,Bound_Account;
+  - Id: 220697
+    AegisName: pg_Earth_Charm_Box_150
+    Name: Earth Charm Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6515;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220697,1,Bound_Account;
+        end;
+      }
+      getitembound 6515,150,Bound_Account;
+  - Id: 220698
+    AegisName: pg_Haze_of_Darkness_Box_150
+    Name: Haze of Darkness Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000565;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220698,1,Bound_Account;
+        end;
+      }
+      getitembound 1000565,150,Bound_Account;
+  - Id: 220699
+    AegisName: pg_Haze_of_Prominence_Box_150
+    Name: Haze of Prominence Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000566;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220699,1,Bound_Account;
+        end;
+      }
+      getitembound 1000566,150,Bound_Account;
+  - Id: 220700
+    AegisName: pg_Haze_of_Snow_Box_150
+    Name: Haze of Snow Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000567;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220700,1,Bound_Account;
+        end;
+      }
+      getitembound 1000567,150,Bound_Account;
+  - Id: 220701
+    AegisName: pg_Haze_of_Earth_Box_150
+    Name: Haze of Earth Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000568;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220701,1,Bound_Account;
+        end;
+      }
+      getitembound 1000568,150,Bound_Account;
+  - Id: 220702
+    AegisName: pg_Haze_of_Wind_Box_150
+    Name: Haze of Wind Box (150)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,1000569;
+      setarray .@q,150;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220702,1,Bound_Account;
+        end;
+      }
+      getitembound 1000569,150,Bound_Account;
+  - Id: 220703
+    AegisName: pg_Neck_Candy_Box_50
+    Name: Neck Candy Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,11513;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220703,1,Bound_Account;
+        end;
+      }
+      getitembound 11513,50,Bound_Account;
+  - Id: 220704
+    AegisName: pg_Heartbroken_Tears_Box_20
+    Name: Heartbroken Tears Box (20)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,6144;
+      setarray .@q,20;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220704,1,Bound_Account;
+        end;
+      }
+      getitembound 6144,20,Bound_Account;
+  - Id: 230001
+    AegisName: pg_Quiver
+    Name: Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1750;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230001,1,Bound_Account;
+        end;
+      }
+      getitembound 1750,500,Bound_Account;
+  - Id: 230002
+    AegisName: pg_Iron_Arrow_Quiver
+    Name: Iron Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1770;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230002,1,Bound_Account;
+        end;
+      }
+      getitembound 1770,500,Bound_Account;
+  - Id: 230003
+    AegisName: pg_Steel_Arrow_Quiver
+    Name: Steel Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1753;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230003,1,Bound_Account;
+        end;
+      }
+      getitembound 1753,500,Bound_Account;
+  - Id: 230004
+    AegisName: pg_Oridecon_Arrow_Quiver
+    Name: Oridecon Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1765;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230004,1,Bound_Account;
+        end;
+      }
+      getitembound 1765,500,Bound_Account;
+  - Id: 230005
+    AegisName: pg_Fire_Arrow_Quiver
+    Name: Fire Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1752;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230005,1,Bound_Account;
+        end;
+      }
+      getitembound 1752,500,Bound_Account;
+  - Id: 230006
+    AegisName: pg_Silver_Arrow_Quiver
+    Name: Silver Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1751;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230006,1,Bound_Account;
+        end;
+      }
+      getitembound 1751,500,Bound_Account;
+  - Id: 230007
+    AegisName: pg_Wind_Arrow_Quiver
+    Name: Wind Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1755;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230007,1,Bound_Account;
+        end;
+      }
+      getitembound 1755,500,Bound_Account;
+  - Id: 230008
+    AegisName: pg_Stone_Arrow_Quiver
+    Name: Stone Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1756;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230008,1,Bound_Account;
+        end;
+      }
+      getitembound 1756,500,Bound_Account;
+  - Id: 230009
+    AegisName: pg_Crystal_Arrow_Quiver
+    Name: Crystal Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1754;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230009,1,Bound_Account;
+        end;
+      }
+      getitembound 1754,500,Bound_Account;
+  - Id: 230010
+    AegisName: pg_Shadow_Arrow_Quiver
+    Name: Shadow Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1767;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230010,1,Bound_Account;
+        end;
+      }
+      getitembound 1767,500,Bound_Account;
+  - Id: 230011
+    AegisName: pg_Immaterial_Arrow_Quiver
+    Name: Immaterial Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1757;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230011,1,Bound_Account;
+        end;
+      }
+      getitembound 1757,500,Bound_Account;
+  - Id: 230012
+    AegisName: pg_Rusty_Arrow_Quiver
+    Name: Rusty Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1762;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230012,1,Bound_Account;
+        end;
+      }
+      getitembound 1762,500,Bound_Account;
+  - Id: 230013
+    AegisName: pg_Trap_Box
+    Name: Trap Box
+    Type: Usable
+    Weight: 100
+    Script: |
+      setarray .@i,1065;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230013,1,Bound_Account;
+        end;
+      }
+      getitembound 1065,500,Bound_Account;
+  - Id: 230014
+    AegisName: pg_Special_Alloy_Trap_Box
+    Name: Special Alloy Trap Box
+    Type: Usable
+    Weight: 100
+    Script: |
+      setarray .@i,7940;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230014,1,Bound_Account;
+        end;
+      }
+      getitembound 7940,500,Bound_Account;
+  - Id: 230015
+    AegisName: pg_Cartridge
+    Name: Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13200;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230015,1,Bound_Account;
+        end;
+      }
+      getitembound 13200,500,Bound_Account;
+  - Id: 230016
+    AegisName: pg_Bloody_Cartridge
+    Name: Bloody Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13222;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230016,1,Bound_Account;
+        end;
+      }
+      getitembound 13222,500,Bound_Account;
+  - Id: 230017
+    AegisName: pg_Silver_Cartridge
+    Name: Silver Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13221;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230017,1,Bound_Account;
+        end;
+      }
+      getitembound 13221,500,Bound_Account;
+  - Id: 230018
+    AegisName: pg_Armor_Piercing_Cartridge
+    Name: Armor-Piercing Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13215;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230018,1,Bound_Account;
+        end;
+      }
+      getitembound 13215,500,Bound_Account;
+  - Id: 230019
+    AegisName: pg_Incandescence_Shot_Cartridge
+    Name: Incandescence Shot Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13216;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230019,1,Bound_Account;
+        end;
+      }
+      getitembound 13216,500,Bound_Account;
+  - Id: 230020
+    AegisName: pg_Glaciation_Shot_Cartridge
+    Name: Glaciation Shot Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13217;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230020,1,Bound_Account;
+        end;
+      }
+      getitembound 13217,500,Bound_Account;
+  - Id: 230021
+    AegisName: pg_Dengeki_Shot_Cartridge
+    Name: Dengeki Shot Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13218;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230021,1,Bound_Account;
+        end;
+      }
+      getitembound 13218,500,Bound_Account;
+  - Id: 230022
+    AegisName: pg_Hearthstone_Shot_Cartridge
+    Name: Hearthstone Shot Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13219;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230022,1,Bound_Account;
+        end;
+      }
+      getitembound 13219,500,Bound_Account;
+  - Id: 230023
+    AegisName: pg_Purification_Shot_Cartridge
+    Name: Purification Shot Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13220;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230023,1,Bound_Account;
+        end;
+      }
+      getitembound 13220,500,Bound_Account;
+  - Id: 230024
+    AegisName: pg_Flare_Bullet_Cartridge
+    Name: Flare Bullet Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13228;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230024,1,Bound_Account;
+        end;
+      }
+      getitembound 13228,500,Bound_Account;
+  - Id: 230025
+    AegisName: pg_Lightning_Bullet_Cartridge
+    Name: Lightning Bullet Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13229;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230025,1,Bound_Account;
+        end;
+      }
+      getitembound 13229,500,Bound_Account;
+  - Id: 230026
+    AegisName: pg_Ice_Bullet_Cartridge
+    Name: Ice Bullet Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13230;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230026,1,Bound_Account;
+        end;
+      }
+      getitembound 13230,500,Bound_Account;
+  - Id: 230027
+    AegisName: pg_Poison_Bullet_Cartridge
+    Name: Poison Bullet Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13231;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230027,1,Bound_Account;
+        end;
+      }
+      getitembound 13231,500,Bound_Account;
+  - Id: 230028
+    AegisName: pg_Blind_Bullet_Cartridge
+    Name: Blind Bullet Cartridge
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13232;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230028,1,Bound_Account;
+        end;
+      }
+      getitembound 13232,500,Bound_Account;
+  - Id: 230029
+    AegisName: pg_Lightning_Sphere_Pack
+    Name: Lightning Sphere Pack
+    Type: Usable
+    Weight: 350
+    Script: |
+      setarray .@i,13224;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230029,1,Bound_Account;
+        end;
+      }
+      getitembound 13224,500,Bound_Account;
+  - Id: 230030
+    AegisName: pg_Blind_Sphere_Pack
+    Name: Blind Sphere Pack
+    Type: Usable
+    Weight: 350
+    Script: |
+      setarray .@i,13226;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230030,1,Bound_Account;
+        end;
+      }
+      getitembound 13226,500,Bound_Account;
+  - Id: 230031
+    AegisName: pg_Poison_Sphere_Pack
+    Name: Poison Sphere Pack
+    Type: Usable
+    Weight: 350
+    Script: |
+      setarray .@i,13225;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230031,1,Bound_Account;
+        end;
+      }
+      getitembound 13225,500,Bound_Account;
+  - Id: 230032
+    AegisName: pg_Freezing_Sphere_Pack
+    Name: Freezing Sphere Pack
+    Type: Usable
+    Weight: 350
+    Script: |
+      setarray .@i,13227;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230032,1,Bound_Account;
+        end;
+      }
+      getitembound 13227,500,Bound_Account;
+  - Id: 230033
+    AegisName: pg_Flare_Sphere_Pack
+    Name: Flare Sphere Pack
+    Type: Usable
+    Weight: 350
+    Script: |
+      setarray .@i,13223;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230033,1,Bound_Account;
+        end;
+      }
+      getitembound 13223,500,Bound_Account;
+  - Id: 230034
+    AegisName: pg_Stun_Arrow_Quiver
+    Name: Stun Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1758;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230034,1,Bound_Account;
+        end;
+      }
+      getitembound 1758,500,Bound_Account;
+  - Id: 230035
+    AegisName: pg_Frozen_Arrow_Quiver
+    Name: Frozen Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1759;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230035,1,Bound_Account;
+        end;
+      }
+      getitembound 1759,500,Bound_Account;
+  - Id: 230036
+    AegisName: pg_Flash_Arrow_Quiver
+    Name: Flash Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1760;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230036,1,Bound_Account;
+        end;
+      }
+      getitembound 1760,500,Bound_Account;
+  - Id: 230037
+    AegisName: pg_Cursed_Arrow_Quiver
+    Name: Cursed Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1761;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230037,1,Bound_Account;
+        end;
+      }
+      getitembound 1761,500,Bound_Account;
+  - Id: 230038
+    AegisName: pg_Poison_Arrow_Quiver
+    Name: Poison Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1763;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230038,1,Bound_Account;
+        end;
+      }
+      getitembound 1763,500,Bound_Account;
+  - Id: 230039
+    AegisName: pg_Sharp_Arrow_Quiver
+    Name: Sharp Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1764;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230039,1,Bound_Account;
+        end;
+      }
+      getitembound 1764,500,Bound_Account;
+  - Id: 230040
+    AegisName: pg_Arrow_of_Counter_Evil_Quiver
+    Name: Arrow of Counter Evil Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1766;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230040,1,Bound_Account;
+        end;
+      }
+      getitembound 1766,500,Bound_Account;
+  - Id: 230041
+    AegisName: pg_Sleep_Arrow_Quiver
+    Name: Sleep Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1768;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230041,1,Bound_Account;
+        end;
+      }
+      getitembound 1768,500,Bound_Account;
+  - Id: 230042
+    AegisName: pg_Mute_Arrow_Quiver
+    Name: Mute Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1769;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230042,1,Bound_Account;
+        end;
+      }
+      getitembound 1769,500,Bound_Account;
+  - Id: 230043
+    AegisName: pg_Holy_Arrow_Quiver
+    Name: Holy Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1772;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230043,1,Bound_Account;
+        end;
+      }
+      getitembound 1772,500,Bound_Account;
+  - Id: 230044
+    AegisName: pg_Elven_Arrow_Quiver
+    Name: Elven Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1773;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230044,1,Bound_Account;
+        end;
+      }
+      getitembound 1773,500,Bound_Account;
+  - Id: 230045
+    AegisName: pg_Hunting_Arrow_Quiver
+    Name: Hunting Arrow Quiver
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1774;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230045,1,Bound_Account;
+        end;
+      }
+      getitembound 1774,500,Bound_Account;
+  - Id: 230046
+    AegisName: pg_Icicle_Kunai_Box
+    Name: Icicle Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13255;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230046,1,Bound_Account;
+        end;
+      }
+      getitembound 13255,500,Bound_Account;
+  - Id: 230047
+    AegisName: pg_Black_Earth_Kunai_Box
+    Name: Black Earth Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13256;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230047,1,Bound_Account;
+        end;
+      }
+      getitembound 13256,500,Bound_Account;
+  - Id: 230048
+    AegisName: pg_High_Wind_Kunai_Box
+    Name: High Wind Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13257;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230048,1,Bound_Account;
+        end;
+      }
+      getitembound 13257,500,Bound_Account;
+  - Id: 230049
+    AegisName: pg_Heat_Wave_Kunai_Box
+    Name: Heat Wave Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13258;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230049,1,Bound_Account;
+        end;
+      }
+      getitembound 13258,500,Bound_Account;
+  - Id: 230050
+    AegisName: pg_Fell_Poison_Kunai_Box
+    Name: Fell Poison Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13259;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230050,1,Bound_Account;
+        end;
+      }
+      getitembound 13259,500,Bound_Account;
+  - Id: 230051
+    AegisName: pg_Explosive_Kunai_Box
+    Name: Explosive Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,13294;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230051,1,Bound_Account;
+        end;
+      }
+      getitembound 13294,500,Bound_Account;
+  - Id: 230052
+    AegisName: pg_Cannon_Ball_Box
+    Name: Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18000;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230052,1,Bound_Account;
+        end;
+      }
+      getitembound 18000,500,Bound_Account;
+  - Id: 230053
+    AegisName: pg_Holy_Cannon_Ball_Box
+    Name: Holy Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18001;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230053,1,Bound_Account;
+        end;
+      }
+      getitembound 18001,500,Bound_Account;
+  - Id: 230054
+    AegisName: pg_Dark_Cannon_Ball_Box
+    Name: Dark Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18002;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230054,1,Bound_Account;
+        end;
+      }
+      getitembound 18002,500,Bound_Account;
+  - Id: 230055
+    AegisName: pg_Soul_Cannon_Ball_Box
+    Name: Soul Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18003;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230055,1,Bound_Account;
+        end;
+      }
+      getitembound 18003,500,Bound_Account;
+  - Id: 230056
+    AegisName: pg_Iron_Cannon_Ball_Box
+    Name: Iron Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18004;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230056,1,Bound_Account;
+        end;
+      }
+      getitembound 18004,500,Bound_Account;
+  - Id: 230057
+    AegisName: pg_Ice_Cannon_Ball_Box
+    Name: Ice Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18005;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230057,1,Bound_Account;
+        end;
+      }
+      getitembound 18005,500,Bound_Account;
+  - Id: 230058
+    AegisName: pg_Lightning_Cannon_Ball_Box
+    Name: Lightning Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18006;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230058,1,Bound_Account;
+        end;
+      }
+      getitembound 18006,500,Bound_Account;
+  - Id: 230059
+    AegisName: pg_Stone_Cannon_Ball_Box
+    Name: Stone Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18007;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230059,1,Bound_Account;
+        end;
+      }
+      getitembound 18007,500,Bound_Account;
+  - Id: 230060
+    AegisName: pg_Fire_Cannon_Ball_Box
+    Name: Fire Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18008;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230060,1,Bound_Account;
+        end;
+      }
+      getitembound 18008,500,Bound_Account;
+  - Id: 230061
+    AegisName: pg_Poison_Cannon_Ball_Box
+    Name: Poison Cannon Ball Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,18009;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230061,1,Bound_Account;
+        end;
+      }
+      getitembound 18009,500,Bound_Account;
+  - Id: 230062
+    AegisName: pg_Kunai_Box
+    Name: Kunai Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1220001;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230062,1,Bound_Account;
+        end;
+      }
+      getitembound 1220001,500,Bound_Account;
+  - Id: 230063
+    AegisName: pg_Kunai_Of_Nothing_Box
+    Name: Kunai Of Nothing Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1220002;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230063,1,Bound_Account;
+        end;
+      }
+      getitembound 1220002,500,Bound_Account;
+  - Id: 230064
+    AegisName: pg_Kunai_Of_Shadow_Box
+    Name: Kunai Of Shadow Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1220003;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230064,1,Bound_Account;
+        end;
+      }
+      getitembound 1220003,500,Bound_Account;
+  - Id: 230065
+    AegisName: pg_Kunai_Of_Hamaya_Box
+    Name: Kunai Of Hamaya Box
+    Type: Usable
+    Weight: 250
+    Script: |
+      setarray .@i,1220004;
+      setarray .@q,500;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 230065,1,Bound_Account;
+        end;
+      }
+      getitembound 1220004,500,Bound_Account;
+  - Id: 220762
+    AegisName: pg_Pride_Gemstone
+    Name: Pride Gemstone
+    Type: Etc
+    Weight: 1
+  - Id: 220766
+    AegisName: pg_Pride_Acid
+    Name: Pride Acid
+    Type: Etc
+    Weight: 1
+  - Id: 220768
+    AegisName: pg_Pride_Sprout
+    Name: Pride Sprout
+    Type: Etc
+    Weight: 1
+  - Id: 220770
+    AegisName: pg_Pride_Coating
+    Name: Pride Coating
+    Type: Etc
+    Weight: 1
+  - Id: 220763
+    AegisName: pg_Pride_Gemstone_Box_50
+    Name: Pride Gemstone Box (50)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,220762;
+      setarray .@q,50;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220763,1,Bound_Account;
+        end;
+      }
+      getitembound 220762,50,Bound_Account;
+  - Id: 220767
+    AegisName: pg_Pride_Acid_Box_100
+    Name: Pride Acid Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,220766;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220767,1,Bound_Account;
+        end;
+      }
+      getitembound 220766,100,Bound_Account;
+  - Id: 220769
+    AegisName: pg_Pride_Sprout_Box_100
+    Name: Pride Sprout Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,220768;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220769,1,Bound_Account;
+        end;
+      }
+      getitembound 220768,100,Bound_Account;
+  - Id: 220771
+    AegisName: pg_Pride_Coating_Box_100
+    Name: Pride Coating Box (100)
+    Type: Usable
+    Weight: 1
+    Script: |
+      setarray .@i,220770;
+      setarray .@q,100;
+      if (!checkweight2(.@i,.@q)) {
+        dispbottom "Not enough weight or free slots: the box was returned.";
+        getitembound 220771,1,Bound_Account;
+        end;
+      }
+      getitembound 220770,100,Bound_Account;
+# ---- SRH consumables END ----

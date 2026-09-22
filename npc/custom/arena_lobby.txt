@@ -1,0 +1,299 @@
+// ===================================================
+// NPCs Esenciales para el Lobby de Arena (hero_ent3)
+// ===================================================
+
+// 1. Healer (Cura HP, SP y AP al 100%, da Agi y Blessing al instante sin texto)
+// Área OnTouch: 7 celdas en X y 8 en Y (cubre el spawn 69,135)
+1@exds,62,93,4	script	Healer	4_F_NURSE,7,8,{
+    callsub L_Heal;
+    end;
+
+OnTouch:
+    callsub L_Heal;
+    end;
+
+L_Heal:
+    if (@ArenaHealerDelay > gettimetick(2))
+        return;
+
+    percentheal 100,100;
+
+    if (MaxAP > 0)
+        AP = MaxAP;
+
+    sc_start SC_BLESSING, 240000, 10;
+    sc_start SC_INCREASEAGI, 240000, 10;
+
+    skilleffect 28, 0; // Heal
+    skilleffect 34, 0; // Blessing
+    skilleffect 29, 0; // Increase Agility
+    @ArenaHealerDelay = gettimetick(2) + 2;
+    return;
+}
+
+// 2. Reseteadora (Restablece Stats y Skills gratis)
+1@exds,65,93,4	script	Reseteador	956,{
+
+	mes "[Resetter]";
+	mes "Hi, " + strcharinfo(0) + ".";
+	mes "What would you like to do?";
+	next;
+
+	switch (select(
+		"Reset Stats",
+		"Reset Skills",
+		"Reset Both",
+		"Cancel"
+	)) {
+		case 1: callsub S_ResetStats;
+		case 2: callsub S_ResetSkills;
+		case 3: callsub S_ResetBoth;
+		case 4: close;
+	}
+	end;
+
+S_ResetStats:
+	resetstatus;
+	mes "[Resetter]";
+	mes "Your stats have been reset.";
+	close;
+
+S_ResetSkills:
+	resetskill;
+	mes "[Resetter]";
+	mes "Your skills have been reset.";
+	close;
+
+S_ResetBoth:
+	resetstatus;
+	resetskill;
+	mes "[Resetter]";
+	mes "Stats and skills have been reset.";
+	close;
+
+	end;
+}
+
+// 3. Tienda de Suministros (Vende items básicos. El "-1" usa el precio por defecto)
+// Formato: mapa,x,y,dir  shop  NombreNPC  Sprite,ItemID:Precio,ItemID:Precio...
+1@exds,68,93,4	shop	Supplies	4_F_KAFRA1,504:-1,505:-1,522:-1,713:-1,12208:-1
+
+
+// 4. Job Master (Clon)
+// Esto clona el Job Master oficial que activaste antes. Tendrá exactamente las mismas funciones.
+1@exds,71,93,4	duplicate(Job Master)	Job Master#lobby	4_F_KAFRA6
+
+// 5. Kafra (Para guardar la posición actual del jugador y abrir Storage)
+1@exds,74,93,4	script	Kafra	4_F_KAFRA6,{
+    mes "[Kafra]";
+    mes "Kafra services at your disposal.";
+    switch(select("Save Position:Open Storage:Cancel")) {
+        case 1:
+            // Obtenemos las coordenadas del JUGADOR actual usando BL_PC
+            getmapxy(.@map$, .@x, .@y, BL_PC);
+            // Guardamos ese punto exacto como su nuevo punto de retorno
+            savepoint .@map$, .@x, .@y;
+            
+            mes "[Kafra]";
+            mes "Your return point has been saved here.";
+            close;
+        case 2:
+            close2;
+            openstorage;
+            end;
+        case 3:
+            close;
+    }
+}
+
+// 6. Breeder (Entrega Monturas, Carros, Halcones, Wargs, Mado Gears y Homúnculos)
+1@exds,77,93,4	script	Breeder	4_F_KAFRA6,{
+	if (ismounting()) {
+		message strcharinfo(0),"You must first remove your mount.";
+		end;
+	}
+	else if (((eaclass()&EAJ_THIRDMASK)==EAJ_RANGER) && !countitem(6124)) {
+		if (!checkfalcon() && getskilllv("HT_FALCON") && !checkwug()) {
+			if(select(" ~ Falcon: ~ Warg")==1)
+				setfalcon;
+			else
+				getitem 6124,1; //Wolf's_Flute
+		}
+		else
+			getitem 6124,1; //Wolf's_Flute
+	}
+	else if (((eaclass()&EAJ_THIRDMASK)==EAJ_MECHANIC) && !checkcart() && getskilllv("MC_PUSHCART")) {
+		if (!checkmadogear() && getskilllv("NC_MADOLICENCE")) {
+			if(select(" ~ Cart: ~ Mado")==1)
+				setcart;
+			else
+				setmadogear;
+		}
+		else
+			setcart;
+	}
+	else if (!checkcart() && getskilllv("MC_PUSHCART"))
+		setcart;
+	else if (!checkfalcon() && getskilllv("HT_FALCON") && !checkwug())
+		setfalcon;
+	else if (!checkriding() && !checkdragon() && getskilllv("KN_RIDING")) {
+		if ((eaclass()&EAJ_THIRDMASK)==EAJ_RUNE_KNIGHT)
+			setdragon;
+		else
+			setriding;
+	}
+	else if (!checkmadogear() && getskilllv("NC_MADOLICENCE"))
+		setmadogear;
+	else {
+		message strcharinfo(0),"You do not meet requirements to rent.";
+		end;
+	}
+	specialeffect2 EF_TEIHIT3;
+	end;
+}
+-	script	DummyConfigData	FAKE_NPC,{
+OnInit:
+	$@dummy_hp = 100000000;
+	$@dummy_sprite = 1905;
+	$@dummy_element = 0;
+	$@dummy_ele_lv = 1;
+	$@dummy_size = 1;
+	$@dummy_race = 0;
+	$@dummy_lv = 250;
+	$@dummy_def = 0;
+	$@dummy_mdef = 0;
+	$@dummy_res = 0;
+	$@dummy_mres = 0;
+	end;
+}
+
+-	script	DummyManagerNode	FAKE_NPC,{
+OnInit:
+	sleep 1000;
+	callsub OnSpawnDummy;
+	end;
+
+OnSpawnDummy:
+    killmonster "hero_ent3", strnpcinfo(0) + "::OnDummyDead";
+    monster "hero_ent3", 65, 84, "Training Dummy", 29550, 1, strnpcinfo(0) + "::OnDummyDead";
+    sleep 500;
+
+    .dummy_gid = $@mobid[0];
+    debugmes "DUMMY: mobid[0]=" + $@mobid[0] + " gid=" + .dummy_gid;
+
+    if (!.dummy_gid) end;
+
+    setunitdata .dummy_gid, UMOB_MAXHP, $@dummy_hp;
+    setunitdata .dummy_gid, UMOB_HP, $@dummy_hp;
+    setunitdata .dummy_gid, UMOB_LEVEL, $@dummy_lv;
+    setunitdata .dummy_gid, UMOB_SIZE, $@dummy_size;
+    setunitdata .dummy_gid, UMOB_RACE, $@dummy_race;
+    setunitdata .dummy_gid, UMOB_ELETYPE, $@dummy_element;
+    setunitdata .dummy_gid, UMOB_ELELEVEL, $@dummy_ele_lv;
+    setunitdata .dummy_gid, UMOB_DEF, $@dummy_def;
+    setunitdata .dummy_gid, UMOB_MDEF, $@dummy_mdef;
+    setunitdata .dummy_gid, UMOB_RES, $@dummy_res;
+    setunitdata .dummy_gid, UMOB_MRES, $@dummy_mres;
+
+    debugmes "DUMMY: after set HP=" + getunitdata(.dummy_gid, UMOB_MAXHP, .@tmp) + " tmp=" + .@tmp;
+    end;
+
+OnDummyDead:
+	sleep 1000;
+	callsub OnSpawnDummy;
+	end;
+}
+
+hero_ent3,68,84,4	script	Dummy Settings	858,{
+L_MainMenu:
+	mes "[Dummy Settings]";
+	mes "=== Current Dummy Status ===";
+	mes "- HP: " + $@dummy_hp;
+	mes "- Level: " + $@dummy_lv + " | Size: " + ($@dummy_size == 0 ? "Small" : ($@dummy_size == 1 ? "Medium" : "Large"));
+	mes "- Race ID: " + $@dummy_race + " | Element: " + $@dummy_element + " (Lv " + $@dummy_ele_lv + ")";
+	mes "- DEF: " + $@dummy_def + " | MDEF: " + $@dummy_mdef;
+	mes "- RES: " + $@dummy_res + " | MRES: " + $@dummy_mres;
+	next;
+
+	switch(select("Change HP Pool:Change Element:Change Size:Change Race:Change Level:Change DEF / MDEF:Change RES / MRES:Respawn / Apply Settings:Cancel")) {
+		case 1:
+			mes "[Dummy Settings]";
+			mes "Select HP target:";
+			next;
+			switch(select("10M HP:100M HP:1B (1,000M) HP:Custom Value")) {
+				case 1: $@dummy_hp = 10000000; break;
+				case 2: $@dummy_hp = 100000000; break;
+				case 3: $@dummy_hp = 1000000000; break;
+				case 4:
+					mes "[Dummy Settings]";
+					mes "Enter desired HP amount:";
+					input $@dummy_hp;
+					if ($@dummy_hp <= 0) $@dummy_hp = 100000000;
+					break;
+			}
+			break;
+
+		case 2:
+			mes "[Dummy Settings]";
+			mes "Select Element Type:";
+			next;
+			set $@dummy_element, select("Neutral:Water:Earth:Fire:Wind:Poison:Holy:Shadow:Ghost:Undead") - 1;
+			mes "[Dummy Settings]";
+			mes "Select Element Level (1 to 4):";
+			next;
+			set $@dummy_ele_lv, select("Level 1:Level 2:Level 3:Level 4");
+			break;
+
+		case 3:
+			mes "[Dummy Settings]";
+			mes "Select Size:";
+			next;
+			set $@dummy_size, select("Small:Medium:Large") - 1;
+			break;
+
+		case 4:
+			mes "[Dummy Settings]";
+			mes "Select Race:";
+			next;
+			set $@dummy_race, select("Formless:Undead:Brute:Plant:Insect:Fish:Demon:Demi-Human:Angel:Dragon") - 1;
+			break;
+
+		case 5:
+			mes "[Dummy Settings]";
+			mes "Enter Monster Level (1 to 275):";
+			input $@dummy_lv;
+			if ($@dummy_lv < 1) $@dummy_lv = 1;
+			if ($@dummy_lv > 275) $@dummy_lv = 275;
+			break;
+
+		case 6:
+			mes "[Dummy Settings]";
+			mes "Enter DEF value:";
+			input $@dummy_def;
+			mes "[Dummy Settings]";
+			mes "Enter MDEF value:";
+			input $@dummy_mdef;
+			break;
+
+		case 7:
+			mes "[Dummy Settings]";
+			mes "Enter RES value (Resistance):";
+			input $@dummy_res;
+			mes "[Dummy Settings]";
+			mes "Enter MRES value (Magic Resistance):";
+			input $@dummy_mres;
+			break;
+
+		case 8:
+			donpcevent "DummyManagerNode::OnSpawnDummy";
+			mes "[Dummy Settings]";
+			mes "Dummy has been reset and respawned with current settings!";
+			close;
+
+		case 9:
+			close;
+	}
+
+	donpcevent "DummyManagerNode::OnSpawnDummy";
+	goto L_MainMenu;
+}

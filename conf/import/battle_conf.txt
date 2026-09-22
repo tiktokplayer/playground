@@ -1,0 +1,7 @@
+
+// no version line at login
+display_version: no
+
+// Guild Emergency Call: usable outside and during WoE and on GvG grounds (1+2+8), but not on "nowarpto" maps (16). WoE castles are exempt from that rule,
+// the 7 vs 7 arenas (nowarpto) are not, so nobody from outside can be called into a match.
+emergency_call: 27
