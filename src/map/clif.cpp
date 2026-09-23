@@ -12257,6 +12257,11 @@ void clif_parse_DropItem(int32 fd, map_session_data *sd){
 		if (sd->sc.cant.drop)
 			break;
 
+		// an invisible character (@hide, or a script-driven spectator via setoption OPTION_INVISIBLE) should not be
+		// able to drop items on the ground - they should not be interacting with the world at all while hidden.
+		if (sd->sc.option & OPTION_INVISIBLE)
+			break;
+
 		if (!pc_dropitem(sd, item_index, item_amount))
 			break;
 
@@ -12572,6 +12577,12 @@ void clif_parse_CreateChatRoom( int32 fd, map_session_data* sd){
 	const PACKET_CZ_CREATE_CHATROOM* p = reinterpret_cast<PACKET_CZ_CREATE_CHATROOM*>( RFIFOP( fd, 0 ) );
 
 	if( sd == nullptr ){
+		return;
+	}
+
+	// an invisible character (@hide, or a script-driven spectator via setoption OPTION_INVISIBLE) should not be able
+	// to open a chat room - they should not be interacting with the world at all while hidden.
+	if( sd->sc.option & OPTION_INVISIBLE ){
 		return;
 	}
 
@@ -15638,6 +15649,11 @@ void clif_parse_FriendsListAdd(int32 fd, map_session_data *sd)
 {
 	map_session_data *f_sd;
 	int32 i;
+
+	// an invisible character (@hide, or a script-driven spectator via setoption OPTION_INVISIBLE) should not be able
+	// to add anyone as a friend - they should not be interacting with the world at all while hidden.
+	if (sd->sc.option & OPTION_INVISIBLE)
+		return;
 
 	// TODO: shuffle packet
 	f_sd = map_nick2sd(RFIFOCP(fd,packet_db[RFIFOW(fd,0)].pos[0]),false);
